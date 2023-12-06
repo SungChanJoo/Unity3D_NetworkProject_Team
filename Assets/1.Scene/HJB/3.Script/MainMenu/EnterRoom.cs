@@ -15,7 +15,7 @@ public class EnterRoom : MonoBehaviour
         {
             SettingUI.RoomName = roomNameInputField.text;
             //规积己 肺流
-            var manager = RoomManager.singleton;
+            //var manager = RoomManager.singleton;
             //规汲沥 累诀
             FindObjectOfType<ServerChecker>().Start_Host();
 
@@ -33,9 +33,9 @@ public class EnterRoom : MonoBehaviour
     {
         if (PlayerNameInputField.text != "")
         {
-            var manager = RoomManager.singleton;
+            //var manager = RoomManager.singleton;
             FindObjectOfType<ServerChecker>().Start_Client();
-            manager.StartClient();
+            //manager.StartClient();
         }
         else
         {

@@ -37,7 +37,7 @@ public class ServerChecker : MonoBehaviour
 {
     public Type type;
 
-    private NetworkRoomManager manager;
+    private NetworkManager manager;
     private KcpTransport kcp;
 
     private string path = string.Empty;
@@ -59,7 +59,8 @@ public class ServerChecker : MonoBehaviour
         {
             DefaultData(path);
         }
-        manager = GetComponent<NetworkRoomManager>();
+        //manager = GetComponent<NetworkManager>();
+        manager = RoomManager.singleton;
         kcp = (KcpTransport)manager.transport;
     }
 
