@@ -21,7 +21,7 @@ public class LoginControll : MonoBehaviour
         {
             //로그인 성공
             user_info info = SQLManager.Instance.Info;
-            Debug.Log(info.User_name + " | " + info.User_Password);
+            Debug.Log(info.User_name + " | " + info.User_Password + " | " + info.User_Nickname);
             gameObject.SetActive(false);
         }
         else
