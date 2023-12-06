@@ -7,6 +7,7 @@ public class MainMenuUI : MonoBehaviour
     public void onClickEnterRoomButton()
     {
         Debug.Log("EnterRoom");
+
     }
     public void onClickQuickOut()
     {

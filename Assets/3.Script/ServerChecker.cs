@@ -37,7 +37,7 @@ public class ServerChecker : MonoBehaviour
 {
     public Type type;
 
-    private NetworkManager manager;
+    private NetworkRoomManager manager;
     private KcpTransport kcp;
 
     private string path = string.Empty;
@@ -59,7 +59,7 @@ public class ServerChecker : MonoBehaviour
         {
             DefaultData(path);
         }
-        manager = GetComponent<NetworkManager>();
+        manager = GetComponent<NetworkRoomManager>();
         kcp = (KcpTransport)manager.transport;
     }
 
@@ -147,7 +147,11 @@ public class ServerChecker : MonoBehaviour
         manager.StartClient();
         Debug.Log($"{manager.networkAddress} : Startclient...");
     }
-
+    public void Start_Host()
+    {
+        manager.StartHost();
+        Debug.Log($"{manager.networkAddress} : StartHost...");
+    }
 
     private void OnApplicationQuit()
     {
