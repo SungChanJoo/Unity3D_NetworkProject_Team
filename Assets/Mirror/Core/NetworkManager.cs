@@ -440,6 +440,8 @@ namespace Mirror
             NetworkClient.Connect(networkAddress);
 
             OnStartClient();
+            ServerChangeScene(onlineScene);
+
         }
 
         /// <summary>Starts the client, connects it to the server via Uri</summary>
@@ -463,7 +465,6 @@ namespace Mirror
             NetworkClient.Connect(uri);
 
             OnStartClient();
-            ServerChangeScene(onlineScene);
 
         }
 
