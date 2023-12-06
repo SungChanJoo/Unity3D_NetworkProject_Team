@@ -11,22 +11,31 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float xVelocity = 0;
     [SerializeField] private float RotationSpeed = 3f;
 
+    [Header("Attack_Colider")]
+    [SerializeField] private Collider attack_col;
+
     [SerializeField] private Animator anim;
 
     private float Velocity;
 
     private bool iswalk = false;
     private bool isrun = false;
-    void Start()
-    {
+    private bool isAttack = false;
 
+    [Header("Att_cool")]
+    [SerializeField] private float Attack_Cool = 0f;
+    private void Awake()
+    {
+        TryGetComponent(out anim);
     }
 
     void Update()
     {
-       Player_Move();
-       Player_Attack();
-        print(isrun);
+        Player_Move();
+        if (!isAttack && Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(Player_Attack());
+        }
     }
 
     private void Player_Move()
@@ -72,18 +81,25 @@ public class PlayerMove : MonoBehaviour
                 RotationSpeed * Time.deltaTime
             );
         }
-
-        
-        //transform.LookAt(transform.position + moveDirection);
     }
 
-    private void Player_Attack()
+    private IEnumerator Player_Attack()
     {
+        isAttack = true;
+        anim.SetTrigger("Attack");
+        yield return new WaitForSeconds(Attack_Cool);
+        isAttack = false;
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            anim.SetTrigger("Attack");
-        }
+
+    public void OnAttackColider()
+    {
+        attack_col.enabled = true;
+    }
+
+    public void OffAttackColider()
+    {
+        attack_col.enabled = false;
     }
 
 
