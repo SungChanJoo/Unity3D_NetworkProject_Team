@@ -200,7 +200,7 @@ public class SQLManager : MonoBehaviour
                 return false;
             }
 
-            string SQLCommand = string.Format(@"SELECT User_Name, User_Password FROM user_info
+            string SQLCommand = string.Format(@"SELECT User_Name, User_Password, User_Nickname FROM user_info
                                                 WHERE User_Name='{0}' AND User_Password = '{1}';", id, password);
 
             MySqlCommand cmd = new MySqlCommand(SQLCommand, Connection);
@@ -216,12 +216,12 @@ public class SQLManager : MonoBehaviour
                     */
                     string name = (Reader.IsDBNull(0)) ? string.Empty : (string)Reader["User_Name"].ToString();
                     string pass = (Reader.IsDBNull(1)) ? string.Empty : (string)Reader["User_Password"].ToString();
-                    //string nick = (Reader.IsDBNull(2)) ? string.Empty : (string)Reader["User_Nickname"].ToString();
+                    string nick = (Reader.IsDBNull(2)) ? string.Empty : (string)Reader["User_Nickname"].ToString();
 
                     if (!name.Equals(string.Empty) || !pass.Equals(string.Empty))// || !nick.Equals(string.Empty))
                     {
                         //정상적으로 data를 불러온 상황
-                        Info = new user_info(name, pass);
+                        Info = new user_info(name, pass, nick);
 
                         //Reader가 닫혀있니?
                         if (!Reader.IsClosed) Reader.Close();

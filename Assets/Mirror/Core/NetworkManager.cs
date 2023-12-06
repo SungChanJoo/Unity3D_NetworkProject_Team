@@ -463,6 +463,8 @@ namespace Mirror
             NetworkClient.Connect(uri);
 
             OnStartClient();
+            ServerChangeScene(onlineScene);
+
         }
 
         /// <summary>Starts a network "host" - a server and client in the same application.</summary>
@@ -498,7 +500,7 @@ namespace Mirror
             // have the onlineScene feature, it will be asynchronous!
 
             // setup server first
-            SetupServer();
+            SetupServer(); //Fix_1206
 
             // scene change needed? then change scene and spawn afterwards.
             // => BEFORE host client connects. if client auth succeeds then the
