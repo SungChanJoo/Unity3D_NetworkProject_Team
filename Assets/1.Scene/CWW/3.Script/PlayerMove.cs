@@ -22,6 +22,8 @@ public class PlayerMove : MonoBehaviour
     private bool isrun = false;
     private bool isAttack = false;
 
+    [Header("Att_cool")]
+    [SerializeField] private float Attack_Cool = 0f;
     private void Awake()
     {
         TryGetComponent(out anim);
@@ -30,7 +32,10 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         Player_Move();
-        Player_Attack();
+        if (!isAttack && Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine(Player_Attack());
+        }
     }
 
     private void Player_Move()
@@ -76,26 +81,16 @@ public class PlayerMove : MonoBehaviour
                 RotationSpeed * Time.deltaTime
             );
         }
-        //transform.LookAt(transform.position + moveDirection);
     }
 
-    IEnumerator Player_Attack_co()
+    private IEnumerator Player_Attack()
     {
         isAttack = true;
-        anim.SetBool("isAttack", isAttack);
-        yield return new WaitForSeconds(1.4f);
-        // 공격이 끝난 후
+        anim.SetTrigger("Attack");
+        yield return new WaitForSeconds(Attack_Cool);
         isAttack = false;
-        anim.SetBool("isAttack", isAttack);
     }
 
-    private void Player_Attack()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            anim.SetTrigger("Attack");
-        }
-    }
 
     public void OnAttackColider()
     {
