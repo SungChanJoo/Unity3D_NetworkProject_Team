@@ -96,6 +96,10 @@ namespace Mirror
                 }
             }
         }
+        public void AllPlayerSetReady()
+        {
+            allPlayersReady = true;
+        }
 
         public override void OnValidate()
         {
