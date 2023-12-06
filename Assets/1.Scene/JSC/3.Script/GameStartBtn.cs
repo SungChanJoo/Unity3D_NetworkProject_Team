@@ -5,12 +5,13 @@ using UnityEngine.SceneManagement;
 using Mirror;
 public class GameStartBtn : MonoBehaviour
 {
+    [SerializeField] private RoomManager manager;
     public string PlayStage;
     public void StartBtn()
     {
         
-        NetworkRoomManager manager = GetComponent<NetworkRoomManager>();
+        manager = GetComponent<RoomManager>();
         manager.AllPlayerSetReady();
-        //manager.ServerChangeScene(PlayStage);
+        manager.ServerChangeScene(PlayStage);
     }
 }
