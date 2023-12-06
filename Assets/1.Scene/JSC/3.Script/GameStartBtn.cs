@@ -10,8 +10,8 @@ public class GameStartBtn : MonoBehaviour
     public void StartBtn()
     {
         
-        manager = GetComponent<RoomManager>();
-        manager.AllPlayerSetReady();
+        manager = FindObjectOfType<RoomManager>();
+        //manager.AllPlayerSetReady();
         manager.ServerChangeScene(PlayStage);
     }
 }

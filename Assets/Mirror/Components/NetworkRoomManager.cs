@@ -96,11 +96,11 @@ namespace Mirror
                 }
             }
         }
-        public void AllPlayerSetReady()
+/*        public void AllPlayerSetReady()
         {
             allPlayersReady = true;
             Debug.Log("AllPlayerReady");
-        }
+        }*/
 
         public override void OnValidate()
         {

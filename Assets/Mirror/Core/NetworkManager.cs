@@ -501,7 +501,7 @@ namespace Mirror
             // have the onlineScene feature, it will be asynchronous!
 
             // setup server first
-            SetupServer(); //Fix_1206
+            //SetupServer(); //Fix_1206
 
             // scene change needed? then change scene and spawn afterwards.
             // => BEFORE host client connects. if client auth succeeds then the
