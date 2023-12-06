@@ -216,12 +216,12 @@ public class SQLManager : MonoBehaviour
                     */
                     string name = (Reader.IsDBNull(0)) ? string.Empty : (string)Reader["User_Name"].ToString();
                     string pass = (Reader.IsDBNull(1)) ? string.Empty : (string)Reader["User_Password"].ToString();
-                    string nick = (Reader.IsDBNull(2)) ? string.Empty : (string)Reader["User_Nickname"].ToString();
+                    //string nick = (Reader.IsDBNull(2)) ? string.Empty : (string)Reader["User_Nickname"].ToString();
 
-                    if (!name.Equals(string.Empty) || !pass.Equals(string.Empty) || !nick.Equals(string.Empty))
+                    if (!name.Equals(string.Empty) || !pass.Equals(string.Empty))// || !nick.Equals(string.Empty))
                     {
                         //정상적으로 data를 불러온 상황
-                        Info = new user_info(name, pass, nick);
+                        Info = new user_info(name, pass);
 
                         //Reader가 닫혀있니?
                         if (!Reader.IsClosed) Reader.Close();

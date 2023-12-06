@@ -4277,7 +4277,7 @@ MonoBehaviour:
   offlineScene: Assets/1.Scene/HJB/1.Scene/HJB_Test_MainMenu.unity
   onlineScene: Assets/1.Scene/HJB/1.Scene/GameRoom.unity
   transport: {fileID: 0}
-  networkAddress: 172.30.1.43
+  networkAddress: 3.36.132.121
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60

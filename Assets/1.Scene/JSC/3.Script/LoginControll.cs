@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoginControll : MonoBehaviour
 {
     public InputField Id_i;
     public InputField Pass_i;
-
+    public string SceneName;
     [SerializeField] private Text _log;
 
     public void LoginBtn()
@@ -23,6 +24,7 @@ public class LoginControll : MonoBehaviour
             user_info info = SQLManager.Instance.Info;
             Debug.Log(info.User_name + " | " + info.User_Password + " | " + info.User_Nickname);
             gameObject.SetActive(false);
+            SceneManager.LoadScene(SceneName);
         }
         else
         {
