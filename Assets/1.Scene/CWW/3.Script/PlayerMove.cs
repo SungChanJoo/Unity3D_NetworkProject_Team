@@ -33,6 +33,9 @@ public class PlayerMove : NetworkBehaviour
     private bool isAttack = false;
     private bool isAttackCool = false;
 
+    float cooldownTimer = 0.0f;
+    bool isCooldown = false;
+
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
     private void Awake()
@@ -52,7 +55,7 @@ public class PlayerMove : NetworkBehaviour
 
     void Update()
     {
-
+        CoolTime();
         if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
             if (!isAttack)
@@ -64,6 +67,22 @@ public class PlayerMove : NetworkBehaviour
             {
                 Start_Player_Attack();
             }
+        }
+
+
+    }
+    private void CoolTime()
+    {
+        cooldownTimer += Time.deltaTime;
+
+        if (cooldownTimer >= 0.3f)
+        {
+            cooldownTimer = 0.0f;
+            isCooldown = false;
+        }
+        else
+        {
+            isCooldown = true;
         }
     }
 
@@ -77,24 +96,22 @@ public class PlayerMove : NetworkBehaviour
         Vector3 cameraRight = camera.transform.right;
         cameraForward.y = 0f;
         cameraRight.y = 0f;
-        //Vector3 moveDirection = (cameraForward.normalized * v + cameraRight.normalized * h).normalized;
         Vector3 moveDirection = (v * cameraForward + h * cameraRight).normalized;
-
-        // Vector3 moveDirection = new Vector3(h, 0, v).normalized;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             isrun = true;
             Velocity = RunSpeed;
             anim.SetBool("isRun", isrun);
-            GameObject RunEffect = Instantiate(RunParticle_Prefab,gameObject.transform.position, Quaternion.identity);
-            Destroy(RunEffect, 1f);
+            if (!isCooldown)
+            {
+                StartCoroutine(CreateRunEffect());
+            }
         }
         else
         {
             isrun = false;
             anim.SetBool("isRun", isrun);
             Velocity = WalkSpeed;
-
         }
 
         if(Mathf.Abs(v) > 0 || Mathf.Abs(h) > 0)
@@ -120,6 +137,27 @@ public class PlayerMove : NetworkBehaviour
             );
         }
     }
+
+    IEnumerator CreateRunEffect()
+    {
+        Vector3 offset = new Vector3(0, 1.5f, 0);
+        GameObject runEffect = Instantiate(RunParticle_Prefab, transform.position, Quaternion.identity);
+        Vector3 startPos = runEffect.transform.position;
+        Vector3 endPos = runEffect.transform.position + offset;
+
+        float duration = 1.5f; // 이펙트 이동에 걸리는 시간
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            runEffect.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        // 이펙트 파괴
+        Destroy(runEffect);
+    }
+
 
     [Command]
     private void Start_Player_Attack()

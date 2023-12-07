@@ -175,7 +175,7 @@ MonoBehaviour:
   yVelocity: 3
   xVelocity: 3
   RotationSpeed: 50
-  RunParticle_Prefab: {fileID: 1363784577269114, guid: 83f5e574addfb424ebd95bbb8ff8b080, type: 3}
+  RunParticle_Prefab: {fileID: 6813416509558619124, guid: 3b7f2c753d435d647a80f1f047a113e3, type: 3}
   attack_col: {fileID: 7285958275257987834}
   anim: {fileID: 0}
   camera: {fileID: 0}
