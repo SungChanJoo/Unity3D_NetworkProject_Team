@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class ChickenSpawner : MonoBehaviour
+public class ChickenSpawner : NetworkBehaviour
 {
     [SerializeField] private GameObject chickenPrefab;
 
@@ -15,6 +16,11 @@ public class ChickenSpawner : MonoBehaviour
     //생성 위치
     private float xPos;
     private float zPos;
+
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+    }
 
     private void Start()
     {

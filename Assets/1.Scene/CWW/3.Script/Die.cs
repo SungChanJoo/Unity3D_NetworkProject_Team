@@ -7,6 +7,7 @@ public class Die : MonoBehaviour
     private Animator anim;
     private BoxCollider colider;
     [SerializeField] GameObject[] gameObjects;
+
     private void Awake()
     {
         TryGetComponent(out anim);
@@ -21,6 +22,11 @@ public class Die : MonoBehaviour
             {
                 gameObjects[i].SetActive(false);
             }
+
+            gameObject.GetComponent<DumbAI>().enabled = false;
+            Destroy(gameObject, 2f);
         }
+
+        
     }
 }

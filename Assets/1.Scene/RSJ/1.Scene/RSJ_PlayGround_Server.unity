@@ -132,9 +132,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1270741732}
+  - component: {fileID: 1270741731}
+  - component: {fileID: 1270741733}
   - component: {fileID: 1270741730}
   - component: {fileID: 1270741729}
-  - component: {fileID: 1270741731}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -202,14 +203,14 @@ MonoBehaviour:
   autoConnectClientBuild: 0
   sendRate: 60
   offlineScene: 
-  onlineScene: 
+  onlineScene: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
   transport: {fileID: 1270741730}
   networkAddress: 3.36.132.121
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 5853081813213986129, guid: 7120779355a81794193623b0a73bb979, type: 3}
+  playerPrefab: {fileID: 3722408627760931810, guid: 46c9e0330d83f234489f4951d41d50a1, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs: []
@@ -240,3 +241,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1270741733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1270741728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: 0
