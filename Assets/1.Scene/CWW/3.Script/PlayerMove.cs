@@ -15,6 +15,8 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private float xVelocity = 0;
     [SerializeField] private float RotationSpeed = 3f;
 
+    [SerializeField] private GameObject RunParticle_Prefab;
+
     [Header("Attack_Colider")]
     [SerializeField] private Collider attack_col;
 
@@ -75,14 +77,17 @@ public class PlayerMove : NetworkBehaviour
         Vector3 cameraRight = camera.transform.right;
         cameraForward.y = 0f;
         cameraRight.y = 0f;
-        Vector3 moveDirection = (cameraForward.normalized * v + cameraRight.normalized * h).normalized;
+        //Vector3 moveDirection = (cameraForward.normalized * v + cameraRight.normalized * h).normalized;
+        Vector3 moveDirection = (v * cameraForward + h * cameraRight).normalized;
 
-       // Vector3 moveDirection = new Vector3(h, 0, v).normalized;
+        // Vector3 moveDirection = new Vector3(h, 0, v).normalized;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             isrun = true;
             Velocity = RunSpeed;
             anim.SetBool("isRun", isrun);
+            GameObject RunEffect = Instantiate(RunParticle_Prefab,gameObject.transform.position, Quaternion.identity);
+            Destroy(RunEffect, 1f);
         }
         else
         {

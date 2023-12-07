@@ -169,12 +169,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   player: {fileID: 3722408627760931810}
-  freeLookCamera_obj: {fileID: 0}
-  WalkSpeed: 1
-  RunSpeed: 10
+  LooatCamera: {fileID: 0}
+  WalkSpeed: 2.5
+  RunSpeed: 4
   yVelocity: 3
   xVelocity: 3
   RotationSpeed: 50
+  RunParticle_Prefab: {fileID: 1363784577269114, guid: 83f5e574addfb424ebd95bbb8ff8b080, type: 3}
   attack_col: {fileID: 7285958275257987834}
   anim: {fileID: 0}
   camera: {fileID: 0}
