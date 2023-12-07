@@ -121,6 +121,16 @@ namespace Mirror
         // which allows users to overwrite it with their own estimations.
         public static ConnectionQuality connectionQuality = ConnectionQuality.ESTIMATING;
 
+        //===========================성찬이가 추가 한것
+
+        public static int PlayerCount = 0;
+
+
+        //===========================성찬이가 추가 한것
+
+
+
+
         // initialization //////////////////////////////////////////////////////
         static void AddTransportHandlers()
         {
@@ -144,6 +154,7 @@ namespace Mirror
             Transport.active.OnClientDataReceived -= OnTransportData;
             Transport.active.OnClientDisconnected -= OnTransportDisconnected;
             Transport.active.OnClientError -= OnTransportError;
+
         }
 
         // connect /////////////////////////////////////////////////////////////
@@ -236,6 +247,9 @@ namespace Mirror
             // IMPORTANT: do NOT clear connection here yet.
             // we still need it in OnTransportDisconnected for callbacks.
             // connection = null;
+                        //=========성찬이가 추가 한 것
+            PlayerCount--;
+            Debug.Log("플레이어 프리펩 제거 : " + PlayerCount);
         }
 
         // transport events ////////////////////////////////////////////////////
@@ -851,6 +865,7 @@ namespace Mirror
             prefabs.Remove(assetId);
             spawnHandlers.Remove(assetId);
             unspawnHandlers.Remove(assetId);
+
         }
 
         // spawn handlers //////////////////////////////////////////////////////
@@ -1082,6 +1097,10 @@ namespace Mirror
             {
                 InvokeIdentityCallbacks(identity);
             }
+
+            //=========성찬이가 추가 한 것
+            PlayerCount++;
+            Debug.Log("플레이어 프리펩 생성 : " + PlayerCount);
         }
 
         // Finds Existing Object with NetId or spawns a new one using AssetId or sceneId

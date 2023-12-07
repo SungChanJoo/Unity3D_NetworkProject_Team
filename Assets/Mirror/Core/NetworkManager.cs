@@ -440,7 +440,7 @@ namespace Mirror
             NetworkClient.Connect(networkAddress);
 
             OnStartClient();
-            ServerChangeScene(onlineScene);
+            //ServerChangeScene(onlineScene);
 
         }
 
@@ -785,6 +785,8 @@ namespace Mirror
 
             foreach (GameObject prefab in spawnPrefabs.Where(t => t != null))
                 NetworkClient.RegisterPrefab(prefab);
+
+            
         }
 
         // This is the only way to clear the singleton, so another instance can be created.
