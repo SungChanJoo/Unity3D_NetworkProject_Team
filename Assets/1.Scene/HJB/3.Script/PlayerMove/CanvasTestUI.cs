@@ -24,5 +24,6 @@ public class CanvasTestUI : MonoBehaviour
     }
 
     public static RectTransform GetPlayersPanel() => instance.playersPanel;
+    public static RectTransform GetMainPlayersPanel() => instance.mainPanel;
     //public static RectTransform GetPlayersPanel() => instance.playersPanel;
 }
