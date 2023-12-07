@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using System.Linq;
+using Mirror;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private GameObject player;
+    [SerializeField] private CinemachineFreeLook LooatCamera;
     [SerializeField] private float WalkSpeed = 10f;
     [SerializeField] private float RunSpeed = 15f;
     [SerializeField] private float yVelocity = 0;
@@ -18,10 +20,8 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private Animator anim;
 
-    [Header("Camera Pos")]
+    [Header("Camera")]
     [SerializeField] private Camera camera;
-
-    private CinemachineFreeLook freeLookCamera;
 
     private float Velocity;
     private float Stop = 0;
@@ -36,19 +36,32 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         TryGetComponent(out anim);
+
         camera = GameObject.Find("Camera").GetComponent<Camera>();
+        //시네머신 Follow , Looat설정
+        LooatCamera = GameObject.Find("CMFreeLook").GetComponent<CinemachineFreeLook>();
+        Transform followTarget = GameObject.FindWithTag("Player").transform;
+        Transform lookAtTarget = GameObject.FindWithTag("Player").transform;
+
+        // Follow와 LookAt을 설정
+        LooatCamera.m_Follow = followTarget;
+        LooatCamera.m_LookAt = lookAtTarget;
     }
 
     void Update()
     {
-        if (!isAttack)
-        {
-            Player_Move();
-        }
 
-        if (!isAttack && Input.GetKeyDown(KeyCode.Space) && !isAttackCool)
+        if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
-            StartCoroutine(Player_Attack());
+            if (!isAttack)
+            {
+                Player_Move();
+            }
+
+            if (!isAttack && Input.GetKeyDown(KeyCode.Space) && !isAttackCool)
+            {
+                Start_Player_Attack();
+            }
         }
     }
 
@@ -103,6 +116,11 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    [Command]
+    private void Start_Player_Attack()
+    {
+        StartCoroutine(Player_Attack());
+    }
     private IEnumerator Player_Attack()
     {
         isAttack = true;
@@ -116,16 +134,19 @@ public class PlayerMove : MonoBehaviour
 
     }
 
-
+    [ClientRpc]
     public void OnAttackColider()
     {
-        attack_col.enabled = true;
+        if (this.isLocalPlayer) attack_col.enabled = true;
     }
-
+    [ClientRpc]
     public void OffAttackColider()
     {
-        attack_col.enabled = false;
+        if(this.isLocalPlayer) attack_col.enabled = false;
     }
+
+
+
 
 
 }
