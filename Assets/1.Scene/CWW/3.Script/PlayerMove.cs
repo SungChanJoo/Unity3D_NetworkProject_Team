@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
+using System.Linq;
+using Mirror;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private GameObject player;
+    [SerializeField] private CinemachineFreeLook LooatCamera;
     [SerializeField] private float WalkSpeed = 10f;
     [SerializeField] private float RunSpeed = 15f;
     [SerializeField] private float yVelocity = 0;
@@ -16,25 +20,48 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private Animator anim;
 
+    [Header("Camera")]
+    [SerializeField] private Camera camera;
+
     private float Velocity;
+    private float Stop = 0;
 
     private bool iswalk = false;
     private bool isrun = false;
     private bool isAttack = false;
+    private bool isAttackCool = false;
 
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
     private void Awake()
     {
         TryGetComponent(out anim);
+
+        camera = GameObject.Find("Camera").GetComponent<Camera>();
+        //시네머신 Follow , Looat설정
+        LooatCamera = GameObject.Find("CMFreeLook").GetComponent<CinemachineFreeLook>();
+        Transform followTarget = GameObject.FindWithTag("Player").transform;
+        Transform lookAtTarget = GameObject.FindWithTag("Player").transform;
+
+        // Follow와 LookAt을 설정
+        LooatCamera.m_Follow = followTarget;
+        LooatCamera.m_LookAt = lookAtTarget;
     }
 
     void Update()
     {
-        Player_Move();
-        if (!isAttack && Input.GetKeyDown(KeyCode.Space))
+
+        if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
-            StartCoroutine(Player_Attack());
+            if (!isAttack)
+            {
+                Player_Move();
+            }
+
+            if (!isAttack && Input.GetKeyDown(KeyCode.Space) && !isAttackCool)
+            {
+                Start_Player_Attack();
+            }
         }
     }
 
@@ -44,7 +71,13 @@ public class PlayerMove : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = new Vector3(h, 0, v).normalized;
+        Vector3 cameraForward = camera.transform.forward;
+        Vector3 cameraRight = camera.transform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        Vector3 moveDirection = (cameraForward.normalized * v + cameraRight.normalized * h).normalized;
+
+       // Vector3 moveDirection = new Vector3(h, 0, v).normalized;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             isrun = true;
@@ -83,24 +116,37 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    [Command]
+    private void Start_Player_Attack()
+    {
+        StartCoroutine(Player_Attack());
+    }
     private IEnumerator Player_Attack()
     {
         isAttack = true;
+        isAttackCool = true;
         anim.SetTrigger("Attack");
-        yield return new WaitForSeconds(Attack_Cool);
+        AnimationClip Attack = anim.runtimeAnimatorController.animationClips.FirstOrDefault(clip => clip.name == "Attack");
+        yield return new WaitForSeconds(Attack.length);
         isAttack = false;
+        yield return new WaitForSeconds(Attack_Cool - Attack.length);
+        isAttackCool = false;
+
     }
 
-
+    [ClientRpc]
     public void OnAttackColider()
     {
-        attack_col.enabled = true;
+        if (this.isLocalPlayer) attack_col.enabled = true;
     }
-
+    [ClientRpc]
     public void OffAttackColider()
     {
-        attack_col.enabled = false;
+        if(this.isLocalPlayer) attack_col.enabled = false;
     }
+
+
+
 
 
 }
