@@ -34,7 +34,7 @@ public class TestPlayerMove : NetworkBehaviour
     [SyncVar] public int health = 1;
     [SyncVar] public string playerName;
 
-    private bool die = false;
+    [SyncVar] bool die = false;
     private int AttacktCount = 0;
 
     //--------------------------UI--------------------------
@@ -42,8 +42,9 @@ public class TestPlayerMove : NetworkBehaviour
     public event System.Action<byte> OnPlayerNumberChanged;
     public event System.Action<Color32> OnPlayerColorChanged;
     public event System.Action<ushort> OnPlayerDataChanged;
-
     
+
+
     static readonly List<TestPlayerMove> playersList = new List<TestPlayerMove>();
 
     [Header("Player UI")]
@@ -65,15 +66,20 @@ public class TestPlayerMove : NetworkBehaviour
     
     [SyncVar(hook = nameof(PlayerDataChanged))]
     public ushort playerData = 0;
+    
+
 
     //--------------------------킬로그--------------------------
-        
-    [SerializeField] private Text killLogText;
+
+    [Header("Player UI")]
+    public GameObject killLogUIPrefab;
+
+    GameObject KillLogUIObject;
+    KillLogUi killLogUi = null;
 
     private void Awake()
     {
-        TryGetComponent(out anim);
-        
+        TryGetComponent(out anim);        
     }
 
     void Update()
@@ -81,6 +87,7 @@ public class TestPlayerMove : NetworkBehaviour
         healthBar.text = new string('-', health);
         if (isLocalPlayer&&!die)
         {
+            if (!isLocalPlayer) return;
             Player_Move();
             if (!isAttack && Input.GetKeyDown(KeyCode.Space))
             {
@@ -126,11 +133,13 @@ public class TestPlayerMove : NetworkBehaviour
         //플레이어가 이동 방향을 바라보도록 회전
         if (moveDirection != Vector3.zero)
         {
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                Quaternion.LookRotation(moveDirection),
-                RotationSpeed * Time.deltaTime
-            );
+            //transform.rotation = Quaternion.Slerp(
+            //    transform.rotation,
+            //    Quaternion.LookRotation(moveDirection),
+            //    RotationSpeed * Time.deltaTime
+            //);
+
+            transform.rotation = Quaternion.LookRotation(moveDirection);
         }
     }
 
@@ -138,11 +147,6 @@ public class TestPlayerMove : NetworkBehaviour
     void Player_Attack()
     {        
         RpcAttack();        
-    }
-    [Command]
-    void KillLog()
-    {
-        RPCkillLog();
     }
 
 
@@ -152,11 +156,11 @@ public class TestPlayerMove : NetworkBehaviour
         StartCoroutine(Player_AttackCoroutine());
     }
     [ClientRpc]
-    void RPCkillLog()
+    void RpcKillLog()
     {
-        killLogText.text = $"DIE : {playerNumber}";
-        Debug.Log("dd");
+        killLogUi?.DisplayKillLog(playerNumber);
     }
+
 
     IEnumerator Player_AttackCoroutine()
     {
@@ -170,14 +174,14 @@ public class TestPlayerMove : NetworkBehaviour
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Attack"))
+        if (other.CompareTag("Attack")&&health!=0)
         {
             --health;
             if (health==0)
             {
                 anim.SetTrigger("Die");
                 die = true;
-                KillLog();        
+                RpcKillLog();
             }
         }
     }
@@ -222,6 +226,8 @@ public class TestPlayerMove : NetworkBehaviour
         
         playersList.Add(this);
 
+        
+
         playerColor = Random.ColorHSV(0f, 1f, 0.9f, 0.9f, 1f, 1f);
 
         //플레이어 닉네임
@@ -265,8 +271,8 @@ public class TestPlayerMove : NetworkBehaviour
     public override void OnStartClient()
     {
         playerUIObject = Instantiate(playerUIPrefab, CanvasTestUI.GetPlayersPanel());
-        playerUI = playerUIObject.GetComponent<PlayerTestUI>();            
-        
+        playerUI = playerUIObject.GetComponent<PlayerTestUI>();       
+
 
         OnPlayerNumberChanged = playerUI.OnPlayerNumberChanged;
         OnPlayerColorChanged = playerUI.OnPlayerColorChanged;
@@ -276,11 +282,16 @@ public class TestPlayerMove : NetworkBehaviour
         OnPlayerColorChanged.Invoke(playerColor);
         OnPlayerDataChanged.Invoke(playerData);
     }
-
+    
     
     public override void OnStartLocalPlayer()
     {
         playerUI.SetLocalPlayer();
+
+
+        KillLogUIObject = Instantiate(killLogUIPrefab, CanvasTestUI.GetMainPlayersPanel());
+        killLogUi = KillLogUIObject.GetComponent<KillLogUi>();
+
 
         CanvasTestUI.SetActive(true);
     }
@@ -299,6 +310,7 @@ public class TestPlayerMove : NetworkBehaviour
         OnPlayerDataChanged = null;
 
         Destroy(playerUIObject);
+        Destroy(KillLogUIObject);
     }
 
     #endregion
