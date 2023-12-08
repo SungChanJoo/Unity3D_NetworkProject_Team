@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class Die : MonoBehaviour
+public class Die : NetworkBehaviour
 {
     private Animator anim;
     private BoxCollider colider;
@@ -13,6 +14,7 @@ public class Die : MonoBehaviour
         TryGetComponent(out anim);
         TryGetComponent(out colider);
     }
+    [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Attack"))

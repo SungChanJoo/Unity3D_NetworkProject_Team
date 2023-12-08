@@ -257,7 +257,6 @@ GameObject:
   - component: {fileID: 572457907}
   - component: {fileID: 572457909}
   - component: {fileID: 572457908}
-  - component: {fileID: 572457910}
   m_Layer: 5
   m_Name: Login_UI
   m_TagString: Untagged
@@ -326,21 +325,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 572457906}
   m_CullTransparentMesh: 1
---- !u!114 &572457910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 572457906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e15cbb336319d4b4084267e44c41d8ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id_i: {fileID: 730616515}
-  Pass_i: {fileID: 2004722639}
-  Log: {fileID: 2030417754}
 --- !u!1 &592700442
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,9 +1156,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 572457910}
-        m_TargetAssemblyTypeName: Login_Controll, Assembly-CSharp
-        m_MethodName: Login_btn
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: LoginControll, Assembly-CSharp
+        m_MethodName: LoginBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
