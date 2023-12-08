@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/1.Scene/RSJ/1.Scene/Playground _Server.unity
     guid: c3ade8fb3afd06e4fb9187cda0f9f8fb
+  - enabled: 1
+    path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
+    guid: ddf1b4c05107bce4fa162dd4c7f59683
   m_configObjects: {}
