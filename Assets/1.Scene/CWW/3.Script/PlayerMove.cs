@@ -8,12 +8,15 @@ using Mirror;
 public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private CinemachineFreeLook LooatCamera;
+    [SerializeField] private CinemachineFreeLook LookatCamera;
+    [SerializeField] private GameObject LookAtPrefab;
     [SerializeField] private float WalkSpeed = 10f;
     [SerializeField] private float RunSpeed = 15f;
     [SerializeField] private float yVelocity = 0;
     [SerializeField] private float xVelocity = 0;
     [SerializeField] private float RotationSpeed = 3f;
+
+    [SerializeField] private GameObject RunParticle_Prefab;
 
     [Header("Attack_Colider")]
     [SerializeField] private Collider attack_col;
@@ -31,26 +34,32 @@ public class PlayerMove : NetworkBehaviour
     private bool isAttack = false;
     private bool isAttackCool = false;
 
+    float cooldownTimer = 0.0f;
+    bool isCooldown = false;
+
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
     private void Awake()
     {
         TryGetComponent(out anim);
-
+        Instantiate(LookAtPrefab);
+        LookatCamera = LookAtPrefab.GetComponent<CinemachineFreeLook>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
         //시네머신 Follow , Looat설정
-        LooatCamera = GameObject.Find("CMFreeLook").GetComponent<CinemachineFreeLook>();
+
         Transform followTarget = GameObject.FindWithTag("Player").transform;
         Transform lookAtTarget = GameObject.FindWithTag("Player").transform;
 
         // Follow와 LookAt을 설정
-        LooatCamera.m_Follow = followTarget;
-        LooatCamera.m_LookAt = lookAtTarget;
+        LookatCamera.m_Follow = followTarget;
+        LookatCamera.m_LookAt = lookAtTarget;
+
+
     }
 
     void Update()
     {
-
+        CoolTime();
         if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
             if (!isAttack)
@@ -62,6 +71,22 @@ public class PlayerMove : NetworkBehaviour
             {
                 Start_Player_Attack();
             }
+        }
+
+
+    }
+    private void CoolTime()
+    {
+        cooldownTimer += Time.deltaTime;
+
+        if (cooldownTimer >= 0.3f)
+        {
+            cooldownTimer = 0.0f;
+            isCooldown = false;
+        }
+        else
+        {
+            isCooldown = true;
         }
     }
 
@@ -75,21 +100,22 @@ public class PlayerMove : NetworkBehaviour
         Vector3 cameraRight = camera.transform.right;
         cameraForward.y = 0f;
         cameraRight.y = 0f;
-        Vector3 moveDirection = (cameraForward.normalized * v + cameraRight.normalized * h).normalized;
-
-       // Vector3 moveDirection = new Vector3(h, 0, v).normalized;
+        Vector3 moveDirection = (v * cameraForward + h * cameraRight).normalized;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             isrun = true;
             Velocity = RunSpeed;
             anim.SetBool("isRun", isrun);
+            if (!isCooldown)
+            {
+                StartCoroutine(CreateRunEffect());
+            }
         }
         else
         {
             isrun = false;
             anim.SetBool("isRun", isrun);
             Velocity = WalkSpeed;
-
         }
 
         if(Mathf.Abs(v) > 0 || Mathf.Abs(h) > 0)
@@ -115,6 +141,27 @@ public class PlayerMove : NetworkBehaviour
             );
         }
     }
+
+    IEnumerator CreateRunEffect()
+    {
+        Vector3 offset = new Vector3(0, 1.5f, 0);
+        GameObject runEffect = Instantiate(RunParticle_Prefab, transform.position, Quaternion.identity);
+        Vector3 startPos = runEffect.transform.position;
+        Vector3 endPos = runEffect.transform.position + offset;
+
+        float duration = 1.5f; // 이펙트 이동에 걸리는 시간
+        float elapsed = 0.0f;
+
+        while (elapsed < duration)
+        {
+            runEffect.transform.position = Vector3.Lerp(startPos, endPos, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        // 이펙트 파괴
+        Destroy(runEffect);
+    }
+
 
     [Command]
     private void Start_Player_Attack()
