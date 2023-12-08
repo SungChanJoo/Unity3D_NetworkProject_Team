@@ -21,6 +21,8 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private Collider attack_col;
 
     [SerializeField] private Animator anim;
+    [SerializeField] private NetworkAnimator networkAnimator;
+
 
     [Header("Camera")]
     [SerializeField] private Camera camera;
@@ -41,6 +43,7 @@ public class PlayerMove : NetworkBehaviour
     private void Awake()
     {
         TryGetComponent(out anim);
+        networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
     }
     public override void OnStartLocalPlayer()
@@ -57,9 +60,10 @@ public class PlayerMove : NetworkBehaviour
     }
     void Update()
     {
-        CoolTime();
+        
         if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
+            CoolTime();
             if (!isAttack)
             {
                 Player_Move();
@@ -73,20 +77,7 @@ public class PlayerMove : NetworkBehaviour
 
 
     }
-    private void CoolTime()
-    {
-        cooldownTimer += Time.deltaTime;
 
-        if (cooldownTimer >= 0.3f)
-        {
-            cooldownTimer = 0.0f;
-            isCooldown = false;
-        }
-        else
-        {
-            isCooldown = true;
-        }
-    }
 
     private void Player_Move()
     {
@@ -106,7 +97,7 @@ public class PlayerMove : NetworkBehaviour
             anim.SetBool("isRun", isrun);
             if (!isCooldown)
             {
-                StartCoroutine(CreateRunEffect());
+                CmdCreateRunEffect();
             }
         }
         else
@@ -140,6 +131,16 @@ public class PlayerMove : NetworkBehaviour
         }
     }
 
+    [Command]
+    private void CmdCreateRunEffect()
+    {
+        RPCCreateUnEffect();
+    }
+    [ClientRpc]
+    private void RPCCreateUnEffect()
+    {
+        StartCoroutine(CreateRunEffect());
+    }
     IEnumerator CreateRunEffect()
     {
         Vector3 offset = new Vector3(0, 1.5f, 0);
@@ -160,12 +161,28 @@ public class PlayerMove : NetworkBehaviour
         Destroy(runEffect);
     }
 
+    private void CoolTime()
+    {
+        cooldownTimer += Time.deltaTime;
+
+        if (cooldownTimer >= 0.3f)
+        {
+            cooldownTimer = 0.0f;
+            isCooldown = false;
+        }
+        else
+        {
+            isCooldown = true;
+        }
+    }
+
 
     [Command]
     private void Start_Player_Attack()
     {
-        StartCoroutine(Player_Attack());
+        RpcPlayerAttack();
     }
+    
     private IEnumerator Player_Attack()
     {
         isAttack = true;
@@ -176,22 +193,48 @@ public class PlayerMove : NetworkBehaviour
         isAttack = false;
         yield return new WaitForSeconds(Attack_Cool - Attack.length);
         isAttackCool = false;
-
     }
 
     [ClientRpc]
+    void RpcPlayerAttack()
+    {
+        StartCoroutine(Player_Attack());
+    }
+
     public void OnAttackColider()
     {
         if (this.isLocalPlayer) attack_col.enabled = true;
     }
-    [ClientRpc]
     public void OffAttackColider()
     {
         if(this.isLocalPlayer) attack_col.enabled = false;
     }
 
+    private BoxCollider colider;
+    [SerializeField] GameObject[] gameObjects;
 
+    [SyncVar] private bool isDie = false;
 
+    [Command(requiresAuthority = false)]
+    private void CmdKill()
+    {
+        RPCKill();
+    }
 
+    
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.CompareTag("Attack"))
+        {
+            CmdKill();
+        }
+    }
+    [ClientRpc]
+    private void RPCKill()
+    {
+        anim.SetTrigger("Die");
+        Destroy(gameObject, 2f);
+    }
 
 }
