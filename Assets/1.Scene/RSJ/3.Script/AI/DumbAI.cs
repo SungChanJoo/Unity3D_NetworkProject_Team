@@ -95,7 +95,7 @@ public class DumbAI : NetworkBehaviour
 
     private void WalkMove()
     {
-        //this.transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        this.transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
     [ClientRpc] // 서버에서 실행되고 클라이언트들에게 정보 전달

@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/1.Scene/CWW/1.Scene/Test.unity
     guid: 01e8418ff07691e448998b063e350064
   - enabled: 1
-    path: Assets/1.Scene/RSJ/1.Scene/Playground _Server.unity
+    path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround_Server.unity
     guid: c3ade8fb3afd06e4fb9187cda0f9f8fb
   - enabled: 1
     path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
