@@ -5,7 +5,7 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 
-public class RPCControll : NetworkBehaviour
+public class RSJ_RPCControll : NetworkBehaviour
 {
     [SerializeField] private TMP_Text chatText;
     [SerializeField] private TMP_InputField inputfield;
