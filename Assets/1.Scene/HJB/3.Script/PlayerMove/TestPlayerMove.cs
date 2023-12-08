@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
+using Cinemachine;
 
 public class TestPlayerMove : NetworkBehaviour
 {
@@ -34,7 +35,7 @@ public class TestPlayerMove : NetworkBehaviour
     [SyncVar] public int health = 1;
     [SyncVar] public string playerName;
 
-    [SyncVar] bool die = false;
+    [SyncVar]bool die = false;
     private int AttacktCount = 0;
 
     //--------------------------UI--------------------------
@@ -76,11 +77,22 @@ public class TestPlayerMove : NetworkBehaviour
 
     GameObject KillLogUIObject;
     KillLogUi killLogUi = null;
+    //--------------------------카메라--------------------------
+    //[SerializeField] private GameObject cameraTarget;
+    //private GameObject _mainCamera;
+    //private GameObject freelookCamera;
+    [Header("Camera")]
+    [SerializeField] private Camera camera;
+
+
 
     private void Awake()
     {
-        TryGetComponent(out anim);        
+        TryGetComponent(out anim);
+        
+        camera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
+    
 
     void Update()
     {
@@ -102,7 +114,11 @@ public class TestPlayerMove : NetworkBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = new Vector3(h, 0, v).normalized;
+        Vector3 cameraForward = camera.transform.forward;
+        Vector3 cameraRight = camera.transform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        Vector3 moveDirection = (v * cameraForward + h * cameraRight).normalized;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             isrun = true;
@@ -142,11 +158,29 @@ public class TestPlayerMove : NetworkBehaviour
             transform.rotation = Quaternion.LookRotation(moveDirection);
         }
     }
-
+    public void KillLog(byte playerNumber)
+    {
+        CmdKillLog(playerNumber);
+    }
     [Command]
     void Player_Attack()
     {        
         RpcAttack();        
+    }
+
+    void CmdKillLog(byte playerNumber)
+    {        
+        RpcKillLog(playerNumber);
+    }
+    void PlayerDie()
+    {
+        CmdPlayerDie();
+    }
+
+    [Command]
+    public void CmdPlayerDie()
+    {
+        RPCPlayerDie();
     }
 
 
@@ -155,11 +189,19 @@ public class TestPlayerMove : NetworkBehaviour
     {
         StartCoroutine(Player_AttackCoroutine());
     }
+    
     [ClientRpc]
-    void RpcKillLog()
-    {
-        killLogUi?.DisplayKillLog(playerNumber);
+    void RpcKillLog(byte playerNumber)
+    {        
+        KillLogUi.instance.DisplayKillLog(playerNumber);
     }
+    [ClientRpc]
+    void RPCPlayerDie()
+    {
+        
+        die = true;               
+    }
+
 
 
     IEnumerator Player_AttackCoroutine()
@@ -171,7 +213,7 @@ public class TestPlayerMove : NetworkBehaviour
         isAttack = false;
     }
 
-    [ServerCallback]
+    //[ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Attack")&&health!=0)
@@ -180,8 +222,9 @@ public class TestPlayerMove : NetworkBehaviour
             if (health==0)
             {
                 anim.SetTrigger("Die");
-                die = true;
-                RpcKillLog();
+                //PlayerDie();
+                KillLog(playerNumber);
+                PlayerDie();
             }
         }
     }
@@ -286,12 +329,17 @@ public class TestPlayerMove : NetworkBehaviour
     
     public override void OnStartLocalPlayer()
     {
+        base.OnStartLocalPlayer();
         playerUI.SetLocalPlayer();
-
-
-        KillLogUIObject = Instantiate(killLogUIPrefab, CanvasTestUI.GetMainPlayersPanel());
-        killLogUi = KillLogUIObject.GetComponent<KillLogUi>();
-
+                
+        CinemachineFreeLook freeLookCamera = FindObjectOfType<CinemachineFreeLook>();
+        if (!isLocalPlayer) return;
+        if (freeLookCamera != null)
+        {
+            // 현재 로컬 플레이어에 따라가도록 설정
+            freeLookCamera.Follow = transform;
+            freeLookCamera.LookAt = transform;
+        }
 
         CanvasTestUI.SetActive(true);
     }
