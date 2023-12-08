@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Mirror
 {
@@ -17,6 +18,7 @@ namespace Mirror
         /// </summary>
         [Tooltip("This flag controls whether the default UI is shown for the room player")]
         public bool showRoomGUI = true;
+        public Text playerCount;
 
         [Header("Diagnostics")]
 
@@ -52,7 +54,6 @@ namespace Mirror
                     DontDestroyOnLoad(gameObject);
 
                 room.roomSlots.Add(this);
-
                 if (NetworkServer.active)
                     room.RecalculateRoomPlayerIndices();
 
@@ -157,7 +158,7 @@ namespace Mirror
                 GUILayout.Label("Ready");
             else
                 GUILayout.Label("Not Ready");
-
+            //|| (isFirstPlayer && index > 0)
             if (((isServer && index > 0) || isServerOnly) && GUILayout.Button("REMOVE"))
             {
                 // This button only shows on the Host for all players other than the Host

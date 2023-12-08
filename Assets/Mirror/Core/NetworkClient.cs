@@ -144,6 +144,7 @@ namespace Mirror
             Transport.active.OnClientDataReceived -= OnTransportData;
             Transport.active.OnClientDisconnected -= OnTransportDisconnected;
             Transport.active.OnClientError -= OnTransportError;
+
         }
 
         // connect /////////////////////////////////////////////////////////////
@@ -236,6 +237,7 @@ namespace Mirror
             // IMPORTANT: do NOT clear connection here yet.
             // we still need it in OnTransportDisconnected for callbacks.
             // connection = null;
+
         }
 
         // transport events ////////////////////////////////////////////////////
@@ -851,6 +853,7 @@ namespace Mirror
             prefabs.Remove(assetId);
             spawnHandlers.Remove(assetId);
             unspawnHandlers.Remove(assetId);
+
         }
 
         // spawn handlers //////////////////////////////////////////////////////
