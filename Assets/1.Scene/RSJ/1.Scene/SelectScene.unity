@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -502,7 +502,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 302181798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e97aeee5111d04945902d80883ec9c4d, type: 3}
+  m_Script: {fileID: 11500000, guid: fef58c37c6303664fba19df4a636facb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DB_Path: 
@@ -711,7 +711,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 464952987}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9973f0c3159243c428e333470083c25b, type: 3}
+  m_Script: {fileID: 11500000, guid: ed9e0ff8e036cce4fbcf6baea497b516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &490575005
@@ -1243,7 +1243,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Playground_Server
+          m_StringArgument: RSJ_Playground_Server
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1372662179
@@ -1512,7 +1512,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1678299866}
         m_TargetAssemblyTypeName: LoginControll, Assembly-CSharp
-        m_MethodName: Login_btn
+        m_MethodName: LoginBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1649,12 +1649,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1678299862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 611d6707a0e24f84991534ce5d6407de, type: 3}
+  m_Script: {fileID: 11500000, guid: f897af0240010254e903e725b87ec929, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id_i: {fileID: 1454949660}
+  Id_i: {fileID: 1454949660}
   Pass_i: {fileID: 2050431944}
-  Log: {fileID: 2102006498}
+  SceneName: RSJ_PlayGround
+  _log: {fileID: 2102006498}
 --- !u!1 &1792605490
 GameObject:
   m_ObjectHideFlags: 0
@@ -1826,7 +1827,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Playground
+          m_StringArgument: RSJ_Playground
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1865609223

@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class Die : MonoBehaviour
+public class Die : NetworkBehaviour
 {
     private Animator anim;
     private BoxCollider colider;
     [SerializeField] GameObject[] gameObjects;
+
     private void Awake()
     {
         TryGetComponent(out anim);
         TryGetComponent(out colider);
     }
+    [ServerCallback]
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Attack"))
@@ -21,6 +24,11 @@ public class Die : MonoBehaviour
             {
                 gameObjects[i].SetActive(false);
             }
+
+            gameObject.GetComponent<DumbAI>().enabled = false;
+            Destroy(gameObject, 2f);
         }
+
+        
     }
 }

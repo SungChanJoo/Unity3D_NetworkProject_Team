@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class ChickenSpawner : MonoBehaviour
+public class ChickenSpawner : NetworkBehaviour
 {
     [SerializeField] private GameObject chickenPrefab;
 
@@ -16,10 +17,18 @@ public class ChickenSpawner : MonoBehaviour
     private float xPos;
     private float zPos;
 
-    private void Start()
+    public override void OnStartServer()
     {
+        if (!isServer) return;
+
+        base.OnStartServer();
         StartCoroutine(GenerateChicken());
     }
+
+    //private void Start()
+    //{
+    //    StartCoroutine(GenerateChicken());
+    //}
 
     private IEnumerator GenerateChicken()
     {
@@ -30,6 +39,10 @@ public class ChickenSpawner : MonoBehaviour
             Vector3 spawnPos = new Vector3(xPos, 1f, zPos);
             GameObject chicken = Instantiate(chickenPrefab, spawnPos, Quaternion.Euler(0f, Random.Range(0, 360f), 0f));
             yield return new WaitForSeconds(0.1f);
+
+            // Network Spawn
+            NetworkServer.Spawn(chicken);
+
         }
     }
 
