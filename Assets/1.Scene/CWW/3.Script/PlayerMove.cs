@@ -8,7 +8,8 @@ using Mirror;
 public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private CinemachineFreeLook LooatCamera;
+    [SerializeField] private CinemachineFreeLook LookatCamera;
+    [SerializeField] private GameObject LookAtPrefab;
     [SerializeField] private float WalkSpeed = 10f;
     [SerializeField] private float RunSpeed = 15f;
     [SerializeField] private float yVelocity = 0;
@@ -41,16 +42,19 @@ public class PlayerMove : NetworkBehaviour
     private void Awake()
     {
         TryGetComponent(out anim);
-
+        Instantiate(LookAtPrefab);
+        LookatCamera = LookAtPrefab.GetComponent<CinemachineFreeLook>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
         //시네머신 Follow , Looat설정
-        LooatCamera = GameObject.Find("CMFreeLook").GetComponent<CinemachineFreeLook>();
+
         Transform followTarget = GameObject.FindWithTag("Player").transform;
         Transform lookAtTarget = GameObject.FindWithTag("Player").transform;
 
         // Follow와 LookAt을 설정
-        LooatCamera.m_Follow = followTarget;
-        LooatCamera.m_LookAt = lookAtTarget;
+        LookatCamera.m_Follow = followTarget;
+        LookatCamera.m_LookAt = lookAtTarget;
+
+
     }
 
     void Update()
