@@ -19,13 +19,16 @@ public class ChickenSpawner : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        base.OnStartServer();
-    }
+        if (!isServer) return;
 
-    private void Start()
-    {
+        base.OnStartServer();
         StartCoroutine(GenerateChicken());
     }
+
+    //private void Start()
+    //{
+    //    StartCoroutine(GenerateChicken());
+    //}
 
     private IEnumerator GenerateChicken()
     {
@@ -36,6 +39,10 @@ public class ChickenSpawner : NetworkBehaviour
             Vector3 spawnPos = new Vector3(xPos, 1f, zPos);
             GameObject chicken = Instantiate(chickenPrefab, spawnPos, Quaternion.Euler(0f, Random.Range(0, 360f), 0f));
             yield return new WaitForSeconds(0.1f);
+
+            // Network Spawn
+            NetworkServer.Spawn(chicken);
+
         }
     }
 
