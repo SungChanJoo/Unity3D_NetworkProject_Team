@@ -9,7 +9,6 @@ public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private CinemachineFreeLook LookatCamera;
-    [SerializeField] private GameObject LookAtPrefab;
     [SerializeField] private float WalkSpeed = 10f;
     [SerializeField] private float RunSpeed = 15f;
     [SerializeField] private float yVelocity = 0;
@@ -42,21 +41,20 @@ public class PlayerMove : NetworkBehaviour
     private void Awake()
     {
         TryGetComponent(out anim);
-        Instantiate(LookAtPrefab);
-        LookatCamera = LookAtPrefab.GetComponent<CinemachineFreeLook>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
-        //시네머신 Follow , Looat설정
-
-        Transform followTarget = GameObject.FindWithTag("Player").transform;
-        Transform lookAtTarget = GameObject.FindWithTag("Player").transform;
-
-        // Follow와 LookAt을 설정
-        LookatCamera.m_Follow = followTarget;
-        LookatCamera.m_LookAt = lookAtTarget;
-
-
     }
-
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        Cinemachine.CinemachineFreeLook freeLookCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
+        if (!isLocalPlayer) return;
+        if (freeLookCamera != null)
+        {
+            // 현재 로컬 플레이어에 따라가도록 설정
+            freeLookCamera.Follow = transform;
+            freeLookCamera.LookAt = transform;
+        }
+    }
     void Update()
     {
         CoolTime();
