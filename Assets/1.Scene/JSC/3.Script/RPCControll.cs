@@ -23,20 +23,6 @@ public class RPCControll : NetworkBehaviour
         PlayerNum = 0;
     }
     //private static event Action<string> onMessage;
-    
-    //client가 server에 connect 되었을 때 콜백함수
-    public override void OnStartAuthority()
-    {
-        if (isLocalPlayer)
-        {
-            cavas.SetActive(true);
-        }
-        if (isOwned)
-        {
-            startBtn.SetActive(true);
-        }
-    }
-
     private void Update()
     {
         PlayerNum = GameObject.FindGameObjectsWithTag("Player").Length;
@@ -53,8 +39,10 @@ public class RPCControll : NetworkBehaviour
     [Client]
     public void StartBtn()
     {
-        if (isOwned && PlayerNum == PlayerMaxCount)
+        if (PlayerNum == PlayerMaxCount)
         {
+
+            Debug.Log(isOwned + "시작해라 제발");
             CmdGameStart();
         }
         else
@@ -62,23 +50,27 @@ public class RPCControll : NetworkBehaviour
             Debug.Log("인원수가 안찼어요");
         }
     }
-    [Command]
+    void UpdateUI()
+    {
+        cavas.SetActive(false);
+        //UI Logic to set the UI for the proper player
+    }
+
+    [Command(requiresAuthority = false)]
     private void CmdGameStart()
     {
-        RPCGamePlay();
+        RPCUpdateUI();
+        //RPCStartGame();
     }
-    [ClientRpc]
-    private void RPCGamePlay()
-    {
-        Debug.Log(SceneName+"RPC 명령어 실행");
-        SceneManager.LoadScene(SceneName);
-        Debug.Log("씬 로드!");
-
-    }
-
     public void UpdatePlayerNum()
     {
         playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
+    }
+
+    [ClientRpc]
+    private void RPCUpdateUI()
+    {
+        UpdateUI();
     }
     /*    [ClientRpc]
         private void RPCExitPlayer()

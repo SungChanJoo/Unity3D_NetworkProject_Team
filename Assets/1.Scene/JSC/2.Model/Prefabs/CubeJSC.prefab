@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4639324228091174413}
   - component: {fileID: 4639324228091174412}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CubeJSC
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,7 +214,7 @@ MonoBehaviour:
   PlayerNum: 0
   cavas: {fileID: 7152377767411964033}
   startBtn: {fileID: 8414827313139785157}
-  SceneName: JSC_Test_GamePlay
+  SceneName: RSJ_PlayGround
 --- !u!1 &4639324229405416413
 GameObject:
   m_ObjectHideFlags: 0

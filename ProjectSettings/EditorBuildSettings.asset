@@ -18,8 +18,18 @@ EditorBuildSettings:
     path: Assets/Mirror/Examples/Room/Scenes/OnlineScene.unity
     guid: d7a6763559b31854586c9e49916273ef
   - enabled: 0
-
-    path: Assets/Mirror/Examples/Room/Scenes/RoomScene.unity
-    guid: 48478f4d522f96945b8396f376299d3a
-
+    path: Assets/1.Scene/HJB/1.Scene/GamePlay.unity
+    guid: 519cc553b81831b4ca15b01aff55f75d
+  - enabled: 0
+    path: Assets/1.Scene/CWW/1.Scene/Test.unity
+    guid: 01e8418ff07691e448998b063e350064
+  - enabled: 0
+    path: Assets/1.Scene/JSC/1.Scene/JSC_Test_Server.unity
+    guid: 303629f7fa6157047969673049ec64a7
+  - enabled: 0
+    path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround_Server.unity
+    guid: c3ade8fb3afd06e4fb9187cda0f9f8fb
+  - enabled: 0
+    path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
+    guid: ddf1b4c05107bce4fa162dd4c7f59683
   m_configObjects: {}
