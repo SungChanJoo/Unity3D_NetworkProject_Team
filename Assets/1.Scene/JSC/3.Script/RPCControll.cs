@@ -12,19 +12,21 @@ public class RPCControll : NetworkBehaviour
     //[SerializeField] private Text chatText;
     [SerializeField] private Text playerCount;
     public int PlayerMaxCount = 2;
-    [SyncVar] public int PlayerNum;
+    public int PlayerNum;
     //[SerializeField] private InputField inputfield;
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
     public string SceneName;
 
-
+    public override void OnStartServer()
+    {
+        PlayerNum = 0;
+    }
     //private static event Action<string> onMessage;
-
+    
     //client가 server에 connect 되었을 때 콜백함수
     public override void OnStartAuthority()
     {
-
         if (isLocalPlayer)
         {
             cavas.SetActive(true);
@@ -34,13 +36,12 @@ public class RPCControll : NetworkBehaviour
             startBtn.SetActive(true);
         }
     }
+
     private void Update()
     {
-        PlayerNum = NetworkClient.PlayerCount;
-        playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
-        //Debug.Log(NetworkClient.PlayerCount);
+        PlayerNum = GameObject.FindGameObjectsWithTag("Player").Length;
+        UpdatePlayerNum();
     }
-
     //클라이언트가 Server를 나갔을 때 
     [ClientCallback]
     private void OnDestroy()
@@ -52,13 +53,13 @@ public class RPCControll : NetworkBehaviour
     [Client]
     public void StartBtn()
     {
-        if (isOwned)
+        if (isOwned && PlayerNum == PlayerMaxCount)
         {
             CmdGameStart();
         }
         else
         {
-            Debug.Log("방장만 시작이 가능해요");
+            Debug.Log("인원수가 안찼어요");
         }
     }
     [Command]
@@ -74,11 +75,16 @@ public class RPCControll : NetworkBehaviour
         Debug.Log("씬 로드!");
 
     }
-/*    [ClientRpc]
-    private void RPCExitPlayer()
+
+    public void UpdatePlayerNum()
     {
-        onPlayerManage?.Invoke();
-    }*/
+        playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
+    }
+    /*    [ClientRpc]
+        private void RPCExitPlayer()
+        {
+            onPlayerManage?.Invoke();
+        }*/
     /*    private void RPCHandlePlayerCount()
         {
             onJoinPlayer?.Invoke();

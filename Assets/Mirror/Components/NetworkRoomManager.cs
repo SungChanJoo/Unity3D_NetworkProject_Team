@@ -161,6 +161,7 @@ namespace Mirror
                 if (player != null)
                 {
                     player.OnClientEnterRoom();
+
                 }
         }
 
