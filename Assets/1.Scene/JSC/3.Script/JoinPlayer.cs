@@ -5,7 +5,7 @@ using Mirror;
 
 public class JoinPlayer : NetworkBehaviour
 {
-    PlayerInfo playerinfo;
+    public PlayerInfo playerinfo;
     [SerializeField] private RPCControll rpcControll;
     private void Awake()
     {

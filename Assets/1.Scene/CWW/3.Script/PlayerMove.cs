@@ -40,6 +40,9 @@ public class PlayerMove : NetworkBehaviour
 
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
+
+    JoinPlayer joinPlayer;
+    [SyncVar] private bool isDie = false;
     private void Awake()
     {
         TryGetComponent(out anim);
@@ -213,27 +216,32 @@ public class PlayerMove : NetworkBehaviour
     private BoxCollider colider;
     [SerializeField] GameObject[] gameObjects;
 
-    [SyncVar] private bool isDie = false;
+    
 
     [Command(requiresAuthority = false)]
-    private void CmdKill()
+    private void CmdKill(string attacker)
     {
-        RPCKill();
+        RPCKill(attacker);
     }
-
     
+
+
+
+
     private void OnTriggerEnter(Collider other)
     {
-
+        string attackPlayer = other.transform.root.GetComponent<JoinPlayer>().playerinfo.name;
         if (other.CompareTag("Attack"))
         {
-            CmdKill();
+            CmdKill(attackPlayer);
         }
     }
     [ClientRpc]
-    private void RPCKill()
+    private void RPCKill(string attacker)
     {
         anim.SetTrigger("Die");
+        isDie = true;
+        KillLogUi.instance.DisplayKillLog(joinPlayer.playerinfo.name, attacker);
         Destroy(gameObject, 2f);
     }
 

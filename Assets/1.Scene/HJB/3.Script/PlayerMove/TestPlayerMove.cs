@@ -158,7 +158,7 @@ public class TestPlayerMove : NetworkBehaviour
     [ClientRpc]
     void RpcKillLog()
     {
-        killLogUi?.DisplayKillLog(playerNumber);
+        //killLogUi?.DisplayKillLog(playerNumber);
     }
 
 
