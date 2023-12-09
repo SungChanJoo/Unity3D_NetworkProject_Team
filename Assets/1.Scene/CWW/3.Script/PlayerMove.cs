@@ -41,13 +41,14 @@ public class PlayerMove : NetworkBehaviour
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
 
-    JoinPlayer joinPlayer;
+    [SerializeField] JoinPlayer joinPlayer;
     [SyncVar] private bool isDie = false;
     private void Awake()
     {
         TryGetComponent(out anim);
         networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
+        joinPlayer = GetComponent<JoinPlayer>();
     }
     public override void OnStartLocalPlayer()
     {
@@ -219,40 +220,33 @@ public class PlayerMove : NetworkBehaviour
     
 
     [Command(requiresAuthority = false)]
-    private void CmdKill(string attacker)
+    private void CmdKill(string attacker, string targetPlayer)
     {
-        RPCKill(attacker);
+        RPCKill(attacker, targetPlayer);
     }
-    
-
-
 
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("왜 자꾸 트리거가 발동되는거냐");
-        
         if (other.CompareTag("Attack"))
         {
             if (other.transform.root.TryGetComponent(out JoinPlayer player))
             {
                 string attackPlayer = player.playerinfo.name;
-                CmdKill(attackPlayer);
-            }
-            else
-            {
-                CmdKill("AI");
-            }
+                string targetPlayer = joinPlayer.playerinfo.name;
+                Debug.Log("재백에 내 문제 아니다" + attackPlayer + " | " + targetPlayer);
 
+                CmdKill(attackPlayer, targetPlayer);
+            }
         }
     }
     [ClientRpc]
-    private void RPCKill(string attacker)
+    private void RPCKill(string attacker, string targetPlayer)
     {
         anim.SetTrigger("Die");
         isDie = true;
-        Debug.Log(joinPlayer.playerinfo.name +" | "+ attacker);
-        KillLogUi.instance.DisplayKillLog(joinPlayer.playerinfo.name, attacker);
+
+        KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
         Destroy(gameObject, 2f);
     }
 
