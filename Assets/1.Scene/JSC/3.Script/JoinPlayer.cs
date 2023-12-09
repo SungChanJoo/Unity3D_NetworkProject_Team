@@ -5,7 +5,8 @@ using Mirror;
 
 public class JoinPlayer : NetworkBehaviour
 {
-    public PlayerInfo playerinfo;
+    [SyncVar] public string playerName;
+    [SyncVar] public bool isFirstPlayer;
     [SerializeField] private RPCControll rpcControll;
     private void Awake()
     {
@@ -13,22 +14,26 @@ public class JoinPlayer : NetworkBehaviour
     }
     public override void OnStartClient()
     {
-        
+        CmdAddPlayer(SQLManager.Instance.Info.User_name, rpcControll.PlayerList.Count == 0);
+    }
 
-        if (rpcControll.PlayerList.Count == 0)
-        {
-            playerinfo = new PlayerInfo(SQLManager.Instance.Info.User_name, true);
+    [Command]
+    public void CmdAddPlayer(string userName, bool isFirst)
+    {
+        RpcAddPlayer(userName, isFirst);
+    }
 
-        }
-        else
-        {
-            playerinfo = new PlayerInfo(SQLManager.Instance.Info.User_name, false);
+    [ClientRpc]
+    public void RpcAddPlayer(string userName, bool isFirst)
+    {
+        playerName = userName;
+        isFirstPlayer = isFirst;
 
-        }
-        rpcControll.PlayerList.Add(this);
+        rpcControll.PlayerList.Add(new PlayerInfo(userName, isFirst));
+
         for (int i = 0; i < rpcControll.PlayerList.Count; i++)
         {
-            Debug.Log(rpcControll.PlayerList[i].playerinfo.name + " | " + rpcControll.PlayerList[i].playerinfo.isFirst);
+            Debug.Log(rpcControll.PlayerList[i].name + " | " + rpcControll.PlayerList[i].isFirst);
         }
     }
 }

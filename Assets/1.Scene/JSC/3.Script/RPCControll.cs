@@ -16,7 +16,8 @@ public class RPCControll : NetworkBehaviour
     //[SerializeField] private InputField inputfield;
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
-    public List<JoinPlayer> PlayerList;
+
+    public SyncList<PlayerInfo> PlayerList = new SyncList<PlayerInfo>();
 
 
     private void Awake()
@@ -30,13 +31,19 @@ public class RPCControll : NetworkBehaviour
             Destroy(gameObject);
         }
     }
-
-
-    public override void OnStartServer()
+    void Start()
     {
-        PlayerList = new List<JoinPlayer>();
-        PlayerNum = 0;
+        // SyncList가 변경될 때 호출되는 콜백 함수 등록
+        PlayerList.Callback += OnPlayerListChanged;
     }
+    private void OnPlayerListChanged(SyncList<PlayerInfo>.Operation op, int index, PlayerInfo oldItem, PlayerInfo newItem)
+    {
+        // 변경된 내용에 대한 처리
+        Debug.Log("PlayerList changed: " + op + " at index " + index);
+    }
+    /*    public override void OnStartServer()
+        {
+        }*/
 
     //private static event Action<string> onMessage;
     private void Update()
@@ -53,21 +60,29 @@ public class RPCControll : NetworkBehaviour
 
     public void UpdatePlayerNum()
     {
-        playerCount.text = $"{PlayerList.Count}/{PlayerMaxCount}";
-
-       // playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
-/*        if(PlayerList.Count != 0)
+        if(PlayerList != null)
         {
+            playerCount.text = $"{PlayerList.Count}/{PlayerMaxCount}";
 
         }
         else
         {
-            for (int i = 0; i < PlayerList.Count; i++)
-            {
-                Debug.Log(PlayerList[i].name + " | " + PlayerList[i].isFirst);
+            Debug.Log("플레이어리스트가 널위한");
+        }
 
-            }
-        }*/
+        // playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
+        /*        if(PlayerList.Count != 0)
+                {
+
+                }
+                else
+                {
+                    for (int i = 0; i < PlayerList.Count; i++)
+                    {
+                        Debug.Log(PlayerList[i].name + " | " + PlayerList[i].isFirst);
+
+                    }
+                }*/
     }
     void UpdateUI()
     {
