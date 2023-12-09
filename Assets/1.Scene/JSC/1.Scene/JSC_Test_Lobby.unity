@@ -1480,6 +1480,7 @@ MonoBehaviour:
   PlayerNum: 0
   cavas: {fileID: 856206506}
   startBtn: {fileID: 258656284}
+  PlayerList: []
 --- !u!1 &902222792
 GameObject:
   m_ObjectHideFlags: 3

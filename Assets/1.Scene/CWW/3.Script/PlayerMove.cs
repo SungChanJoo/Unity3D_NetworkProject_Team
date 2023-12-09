@@ -232,8 +232,8 @@ public class PlayerMove : NetworkBehaviour
         {
             if (other.transform.root.TryGetComponent(out JoinPlayer player))
             {
-                string attackPlayer = player.playerName;
-                string targetPlayer = joinPlayer.playerName;
+                string attackPlayer = player.playerinfo.name;
+                string targetPlayer = joinPlayer.playerinfo.name;
                 Debug.Log("재백에 내 문제 아니다" + attackPlayer + " | " + targetPlayer);
 
                 CmdKill(attackPlayer, targetPlayer);
