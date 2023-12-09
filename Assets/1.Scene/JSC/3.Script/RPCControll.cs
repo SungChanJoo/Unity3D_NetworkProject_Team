@@ -78,7 +78,7 @@ public class RPCControll : NetworkBehaviour
     [Client]
     public void StartBtn()
     {
-        if (PlayerNum == PlayerMaxCount)
+        if (true)
         {
 
             Debug.Log(isOwned + "시작해라 제발");
