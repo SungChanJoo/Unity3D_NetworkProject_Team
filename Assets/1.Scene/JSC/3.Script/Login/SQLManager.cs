@@ -25,11 +25,6 @@ public class user_info
     public string User_Password { get; private set; }
     public string User_Nickname { get; private set; }
 
-    public user_info(string name, string password)
-    {
-        User_name = name;
-        User_Password = password;
-    }
     public user_info(string name, string password, string nickname)
     {
         User_name = name;
@@ -40,6 +35,7 @@ public class user_info
 
 public class SQLManager : MonoBehaviour
 {
+
     public user_info Info;
 
     public MySqlConnection Connection;
