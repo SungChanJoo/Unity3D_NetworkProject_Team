@@ -24,9 +24,9 @@ public class KillLogUi : MonoBehaviour
 
 
 
-    public void DisplayKillLog(string attackr, string targetPlayer)
+    public void DisplayKillLog(string player, string attackr)
     {
-        killLogText.text = $"{attackr}°¡ {targetPlayer}Á×ÀÓ";
+        killLogText.text = $"{attackr}°¡ {player}Á×ÀÓ";
 
         //StartCoroutine(HideKillLog());
     }
