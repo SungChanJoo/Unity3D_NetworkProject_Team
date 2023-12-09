@@ -41,7 +41,6 @@ public class RPCControll : NetworkBehaviour
     //private static event Action<string> onMessage;
     private void Update()
     {
-        PlayerNum = GameObject.FindGameObjectsWithTag("Player").Length;
         UpdatePlayerNum();
     }
     //클라이언트가 Server를 나갔을 때 

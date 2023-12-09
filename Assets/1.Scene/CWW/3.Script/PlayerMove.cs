@@ -230,10 +230,20 @@ public class PlayerMove : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        string attackPlayer = other.transform.root.GetComponent<JoinPlayer>().playerinfo.name;
+        Debug.Log("왜 자꾸 트리거가 발동되는거냐");
+        
         if (other.CompareTag("Attack"))
         {
-            CmdKill(attackPlayer);
+            if (other.transform.root.TryGetComponent(out JoinPlayer player))
+            {
+                string attackPlayer = player.playerinfo.name;
+                CmdKill(attackPlayer);
+            }
+            else
+            {
+                CmdKill("AI");
+            }
+
         }
     }
     [ClientRpc]
