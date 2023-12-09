@@ -251,6 +251,7 @@ public class PlayerMove : NetworkBehaviour
     {
         anim.SetTrigger("Die");
         isDie = true;
+        Debug.Log(joinPlayer.playerinfo.name +" | "+ attacker);
         KillLogUi.instance.DisplayKillLog(joinPlayer.playerinfo.name, attacker);
         Destroy(gameObject, 2f);
     }
