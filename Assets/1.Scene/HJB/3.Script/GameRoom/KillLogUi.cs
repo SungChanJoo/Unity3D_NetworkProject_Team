@@ -7,7 +7,7 @@ using Mirror;
 public class KillLogUi : MonoBehaviour
 {
     public static KillLogUi instance = null;
-
+    private Coroutine hideCoroutine;
     void Awake()
     {
         if (instance == null)
@@ -22,17 +22,23 @@ public class KillLogUi : MonoBehaviour
     [Header("KillLog")]
     [SerializeField] private Text killLogText;
 
-
-
     public void DisplayKillLog(string attackr, string targetPlayer)
     {
-        killLogText.text += $"\n{attackr}가 {targetPlayer}죽임";
+        killLogText.text += 
+            $"\n<color=#{ColorUtility.ToHtmlStringRGB(Color.red)}>{attackr}</color>이(가) " +
+            $"<color=#{ColorUtility.ToHtmlStringRGB(Color.blue)}>{targetPlayer}</color>을(를) 죽였어요!!";
 
-        //StartCoroutine(HideKillLog());
+        if (hideCoroutine != null)
+        {
+            StopCoroutine(hideCoroutine);
+        }
+
+        // 10초 대기
+        hideCoroutine = StartCoroutine(HideKillLog());
     }
 
 
-
+    
 
     private IEnumerator HideKillLog()
     {
