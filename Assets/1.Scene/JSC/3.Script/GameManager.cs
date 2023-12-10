@@ -19,6 +19,8 @@ public class GameManager : NetworkBehaviour
 
     public readonly SyncList<JoinPlayer> PlayerList = new SyncList<JoinPlayer>();
 
+    private bool isPlay = false;
+
 
     private void Awake()
     {
@@ -38,16 +40,38 @@ public class GameManager : NetworkBehaviour
         base.OnStartServer();
     }
 
-
+    
     public void AddPlayerOnServer(JoinPlayer playerInfo)
     {
         PlayerList.Add(playerInfo);
     }
 
+    
+    public void RemovePlayerOnServer(JoinPlayer playerInfo)
+    {
+        PlayerList.Remove(playerInfo);
+        Debug.Log("나간 플레이어 이름 : "+playerInfo.playerName + " ㅣ 현재 인원 수 "+PlayerList.Count);
+    }
     private void Update()
     {
-        UpdatePlayerNum();
+        UpdatePlayerNum();        
+        
     }
+
+    
+
+
+
+    private bool IsGameInProgress()
+    {
+        return isPlay;
+    }
+    private bool IsPlayerCountOne()
+    {
+        return PlayerList.Count == 1;
+    }
+
+
     //클라이언트가 Server를 나갔을 때 
     [ClientCallback]
     private void OnDestroy()
@@ -61,6 +85,7 @@ public class GameManager : NetworkBehaviour
         if(PlayerList != null)
         {
             playerCount.text = $"{PlayerList.Count}/{PlayerMaxCount}";
+            
         }
         else
         {
@@ -76,9 +101,8 @@ public class GameManager : NetworkBehaviour
     [Client]
     public void StartBtn()
     {
-        if (true)
+        if (PlayerList.Count>1)
         {
-
             Debug.Log(isOwned + "시작해라 제발");
             CmdGameStart();
         }
@@ -99,5 +123,6 @@ public class GameManager : NetworkBehaviour
     private void RPCUpdateUI()
     {
         UpdateUI();
+        
     }
 }
