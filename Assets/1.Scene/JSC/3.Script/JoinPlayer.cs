@@ -9,6 +9,8 @@ public class JoinPlayer : NetworkBehaviour
     public bool isFirstPlayer;
     [SyncVar(hook = nameof(OnPlayerNameChanged))]
     public string playerName;
+    [SyncVar]
+    public bool IsDead;
 
     private void OnPlayerNameChanged(string oldName, string newName)
     {
@@ -29,7 +31,25 @@ public class JoinPlayer : NetworkBehaviour
     {
         playerName = newName;
         isFirstPlayer = isFirst;
+        IsDead = false;
+        GameManager.Instance.RPCHandlePlayerList();
     }
+    [Command(requiresAuthority = false)]
+    public void CmdPlayerDie()
+    {
+        Debug.Log($"플레이어 뒤짐{playerName} : {isFirstPlayer} | {IsDead}");
+        RPCHandlePlayerDie();
+    }
+    public void PlayerDie()
+    {
+        IsDead = true;
+    }
+    [ClientRpc]
+    public void RPCHandlePlayerDie()
+    {
+        PlayerDie();
+    }
+
 
     /*    public void EnterPlayer()
         {

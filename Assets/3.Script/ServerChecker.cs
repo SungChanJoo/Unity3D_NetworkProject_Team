@@ -138,6 +138,7 @@ public class ServerChecker : MonoBehaviour
             };
             NetworkServer.OnDisconnectedEvent += (NetworkConnectionToClient) =>
             {
+
                 Debug.Log($"client DisConnect : {NetworkConnectionToClient.address}");
             };
             //Debug.Log("StartServer(), 플레이어수" + ServerManager.Instance.PlayerNum);

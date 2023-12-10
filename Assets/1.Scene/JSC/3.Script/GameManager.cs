@@ -17,7 +17,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
 
-    //public readonly SyncList<JoinPlayer> PlayerList = new SyncList<JoinPlayer>();
+    //public GameObject[] PlayerList;
+    public List<JoinPlayer> PlayerList = new List<JoinPlayer>();
 
 
     private void Awake()
@@ -31,30 +32,50 @@ public class GameManager : NetworkBehaviour
             Destroy(gameObject);
         }
     }
-    [SerializeField] private GameObject playerPrefab;
 
     public override void OnStartServer()
     {
         base.OnStartServer();
     }
 
-
-/*    public void AddPlayerOnServer(JoinPlayer playerInfo)
+    /*    public void AddPlayerOnServer(JoinPlayer playerInfo)
+        {
+            PlayerList.Add(playerInfo);
+        }*/
+    public void UpdateList()
     {
-        PlayerList.Add(playerInfo);
-    }*/
+        if(NetworkClient.active)
+        {
+            PlayerList.Clear();
+            GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
+            for (int i = 0; i < playerArray.Length; i++)
+            {
+                if (PlayerList.Count < playerArray.Length)
+                {
+                    PlayerList.Add(playerArray[i].GetComponent<JoinPlayer>());
+                }
+                else
+                {
+                    PlayerList[i] = playerArray[i].GetComponent<JoinPlayer>();
+                }
+            }
+            PlayerNum = PlayerList.Count;
+        }
 
+    }
     private void Update()
     {
-        PlayerNum = GameObject.FindGameObjectsWithTag("Player").Length;
         UpdatePlayerNum();
     }
     //클라이언트가 Server를 나갔을 때 
     [ClientCallback]
     private void OnDestroy()
     {
+        RPCHandlePlayerList();
+        Debug.Log("클라이언트 종료했어");
         if (!isLocalPlayer) return;
     }
+
     //RPC는 결국 ClientRpc 명령어 < Command(server)명령어 < Client 명령어?
 
     public void UpdatePlayerNum()
@@ -87,8 +108,11 @@ public class GameManager : NetworkBehaviour
     {
         RPCUpdateUI();
     }
-
-
+    [ClientRpc]
+    public void RPCHandlePlayerList()
+    {
+        UpdateList();
+    }
     [ClientRpc]
     private void RPCUpdateUI()
     {
