@@ -5,9 +5,10 @@ using Mirror;
 
 public class JoinPlayer : NetworkBehaviour
 {
-    [SyncVar] public string playerName;
-    [SyncVar] public bool isFirstPlayer;
+    public string playerName;
+    public bool isFirstPlayer;
     [SerializeField] private RPCControll rpcControll;
+   
     private void Awake()
     {
         rpcControll = FindObjectOfType<RPCControll>();
@@ -29,8 +30,9 @@ public class JoinPlayer : NetworkBehaviour
         playerName = userName;
         isFirstPlayer = isFirst;
 
-        rpcControll.PlayerList.Add(new PlayerInfo(userName, isFirst));
 
+        rpcControll.PlayerList.Add(new PlayerInfo(playerName,isFirstPlayer));
+        Debug.Log(rpcControll.PlayerList.Count);
         for (int i = 0; i < rpcControll.PlayerList.Count; i++)
         {
             Debug.Log(rpcControll.PlayerList[i].name + " | " + rpcControll.PlayerList[i].isFirst);
