@@ -687,7 +687,6 @@ MonoBehaviour:
   PlayerNum: 0
   cavas: {fileID: 856206506}
   startBtn: {fileID: 258656284}
-  playerPrefab: {fileID: 0}
 --- !u!4 &388794511
 Transform:
   m_ObjectHideFlags: 0
@@ -1013,10 +1012,6 @@ PrefabInstance:
     - target: {fileID: 6831413275466817789, guid: 3064a50e5368c7a4eb72ab99d8578224, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6831413275466817790, guid: 3064a50e5368c7a4eb72ab99d8578224, type: 3}
-      propertyPath: chicken_num
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6831413275466817791, guid: 3064a50e5368c7a4eb72ab99d8578224, type: 3}
       propertyPath: m_Name
