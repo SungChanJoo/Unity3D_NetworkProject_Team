@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
 
-    public static readonly List<JoinPlayer> PlayerList = new List<JoinPlayer>();
+    public readonly SyncList<JoinPlayer> PlayerList = new SyncList<JoinPlayer>();
 
 
     private void Awake()
@@ -32,41 +32,18 @@ public class GameManager : NetworkBehaviour
         }
     }
     [SerializeField] private GameObject playerPrefab;
-    private const string defaultPlayerName = "DefaultPlayer";
 
     public override void OnStartServer()
     {
         base.OnStartServer();
-        StartCoroutine(SpawnPlayers());
     }
 
-    private IEnumerator SpawnPlayers()
-    {
-        yield return new WaitForSeconds(1f); // 임의의 딜레이를 줄 수 있습니다.
-
-        // 서버에서 플레이어를 생성하고 초기화
-        GameObject player = Instantiate(playerPrefab);
-        NetworkServer.AddPlayerForConnection(player.GetComponent<NetworkIdentity>().connectionToClient, player);
-
-        JoinPlayer joinPlayer = player.GetComponent<JoinPlayer>();
-        if (joinPlayer != null)
-        {
-            // 플레이어의 이름 설정 (임의로 설정하거나 로그인 정보에서 가져와 설정 가능)
-            joinPlayer.CmdSetPlayerName("Player1");
-        }
-    }
 
     public void AddPlayerOnServer(JoinPlayer playerInfo)
     {
         PlayerList.Add(playerInfo);
     }
 
-
-    /*    public override void OnStartServer()
-        {
-        }*/
-
-    //private static event Action<string> onMessage;
     private void Update()
     {
         UpdatePlayerNum();
@@ -89,20 +66,6 @@ public class GameManager : NetworkBehaviour
         {
             Debug.Log("플레이어리스트가 널위한");
         }
-
-        // playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
-        /*        if(PlayerList.Count != 0)
-                {
-
-                }
-                else
-                {
-                    for (int i = 0; i < PlayerList.Count; i++)
-                    {
-                        Debug.Log(PlayerList[i].name + " | " + PlayerList[i].isFirst);
-
-                    }
-                }*/
     }
     void UpdateUI()
     {
@@ -125,7 +88,6 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-
     [Command(requiresAuthority = false)]
     private void CmdGameStart()
     {
@@ -138,13 +100,4 @@ public class GameManager : NetworkBehaviour
     {
         UpdateUI();
     }
-    /*    [ClientRpc]
-        private void RPCExitPlayer()
-        {
-            onPlayerManage?.Invoke();
-        }*/
-    /*    private void RPCHandlePlayerCount()
-        {
-            onJoinPlayer?.Invoke();
-        }*/
 }
