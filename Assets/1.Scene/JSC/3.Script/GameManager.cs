@@ -37,48 +37,54 @@ public class GameManager : NetworkBehaviour
     {
         base.OnStartServer();
     }
-
+    
     /*    public void AddPlayerOnServer(JoinPlayer playerInfo)
         {
             PlayerList.Add(playerInfo);
         }*/
-    public void UpdateList()
+    IEnumerator UpdateList_co()
     {
-        if(NetworkClient.active)
+        while(true)
         {
-            PlayerList.Clear();
-            GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
-            for (int i = 0; i < playerArray.Length; i++)
+            if (NetworkClient.active)
             {
-                if (PlayerList.Count < playerArray.Length)
+                PlayerList.Clear();
+                GameObject[] playerArray = GameObject.FindGameObjectsWithTag("Player");
+                for (int i = 0; i < playerArray.Length; i++)
                 {
-                    PlayerList.Add(playerArray[i].GetComponent<JoinPlayer>());
+                    if (PlayerList.Count < playerArray.Length)
+                    {
+                        PlayerList.Add(playerArray[i].GetComponent<JoinPlayer>());
+                    }
+                    else
+                    {
+                        PlayerList[i] = playerArray[i].GetComponent<JoinPlayer>();
+                    }
                 }
-                else
-                {
-                    PlayerList[i] = playerArray[i].GetComponent<JoinPlayer>();
-                }
+                PlayerNum = PlayerList.Count;
             }
-            PlayerNum = PlayerList.Count;
+            yield return null;
         }
-
+    }
+    private void Start()
+    {
+        StartCoroutine(UpdateList_co());
     }
     private void Update()
     {
-        UpdatePlayerNum();
+        UpdatePlayerNumUI();
     }
     //클라이언트가 Server를 나갔을 때 
     [ClientCallback]
     private void OnDestroy()
     {
-        RPCHandlePlayerList();
         Debug.Log("클라이언트 종료했어");
         if (!isLocalPlayer) return;
     }
 
     //RPC는 결국 ClientRpc 명령어 < Command(server)명령어 < Client 명령어?
 
-    public void UpdatePlayerNum()
+    public void UpdatePlayerNumUI()
     {
         playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
     }
@@ -101,18 +107,14 @@ public class GameManager : NetworkBehaviour
         {
             Debug.Log("인원수가 안찼어요");
         }
-    }
+    } 
 
     [Command(requiresAuthority = false)]
     private void CmdGameStart()
     {
         RPCUpdateUI();
     }
-    [ClientRpc]
-    public void RPCHandlePlayerList()
-    {
-        UpdateList();
-    }
+
     [ClientRpc]
     private void RPCUpdateUI()
     {

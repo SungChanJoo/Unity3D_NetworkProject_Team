@@ -32,7 +32,6 @@ public class JoinPlayer : NetworkBehaviour
         playerName = newName;
         isFirstPlayer = isFirst;
         IsDead = false;
-        GameManager.Instance.RPCHandlePlayerList();
     }
     [Command(requiresAuthority = false)]
     public void CmdPlayerDie()
