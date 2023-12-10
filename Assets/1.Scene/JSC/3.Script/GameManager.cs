@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Mirror;
 
-public class RPCControll : NetworkBehaviour
+public class GameManager : NetworkBehaviour
 {
-    public static RPCControll Instance = null;
+    public static GameManager Instance = null;
     //[SerializeField] private Text chatText;
     [SerializeField] private Text playerCount;
     public int PlayerMaxCount = 2;
@@ -17,7 +17,7 @@ public class RPCControll : NetworkBehaviour
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
 
-    public SyncList<PlayerInfo> PlayerList = new SyncList<PlayerInfo>();
+    public static readonly List<JoinPlayer> PlayerList = new List<JoinPlayer>();
 
 
     private void Awake()
@@ -31,16 +31,37 @@ public class RPCControll : NetworkBehaviour
             Destroy(gameObject);
         }
     }
-    void Start()
+    [SerializeField] private GameObject playerPrefab;
+    private const string defaultPlayerName = "DefaultPlayer";
+
+    public override void OnStartServer()
     {
-        // SyncList가 변경될 때 호출되는 콜백 함수 등록
-        PlayerList.Callback += OnPlayerListChanged;
+        base.OnStartServer();
+        StartCoroutine(SpawnPlayers());
     }
-    private void OnPlayerListChanged(SyncList<PlayerInfo>.Operation op, int index, PlayerInfo oldItem, PlayerInfo newItem)
+
+    private IEnumerator SpawnPlayers()
     {
-        // 변경된 내용에 대한 처리
-        Debug.Log("PlayerList changed: " + op + " at index " + index);
+        yield return new WaitForSeconds(1f); // 임의의 딜레이를 줄 수 있습니다.
+
+        // 서버에서 플레이어를 생성하고 초기화
+        GameObject player = Instantiate(playerPrefab);
+        NetworkServer.AddPlayerForConnection(player.GetComponent<NetworkIdentity>().connectionToClient, player);
+
+        JoinPlayer joinPlayer = player.GetComponent<JoinPlayer>();
+        if (joinPlayer != null)
+        {
+            // 플레이어의 이름 설정 (임의로 설정하거나 로그인 정보에서 가져와 설정 가능)
+            joinPlayer.CmdSetPlayerName("Player1");
+        }
     }
+
+    public void AddPlayerOnServer(JoinPlayer playerInfo)
+    {
+        PlayerList.Add(playerInfo);
+    }
+
+
     /*    public override void OnStartServer()
         {
         }*/
@@ -63,7 +84,6 @@ public class RPCControll : NetworkBehaviour
         if(PlayerList != null)
         {
             playerCount.text = $"{PlayerList.Count}/{PlayerMaxCount}";
-
         }
         else
         {

@@ -41,7 +41,7 @@ public class PlayerMove : NetworkBehaviour
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
 
-    [SerializeField] JoinPlayer joinPlayer;
+    JoinPlayer joinPlayer;
     [SyncVar] private bool isDie = false;
     private void Awake()
     {
@@ -49,10 +49,13 @@ public class PlayerMove : NetworkBehaviour
         networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
         joinPlayer = GetComponent<JoinPlayer>();
+        Debug.Log("플레이어 : " + joinPlayer.playerName + " | " + joinPlayer.isFirstPlayer);
     }
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
+
+
         Cinemachine.CinemachineFreeLook freeLookCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
         if (!isLocalPlayer) return;
         if (freeLookCamera != null)
