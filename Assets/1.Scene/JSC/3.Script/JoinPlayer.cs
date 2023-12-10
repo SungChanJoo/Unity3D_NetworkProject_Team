@@ -20,7 +20,7 @@ public class JoinPlayer : NetworkBehaviour
         if (isLocalPlayer)
         {
             // 로컬 플레이어인 경우, 이름 설정
-            CmdSetPlayer(SQLManager.Instance.Info.User_name, GameManager.Instance.PlayerList.Count == 0);
+            CmdSetPlayer(SQLManager.Instance.Info.User_name, GameManager.Instance.PlayerNum == 1);
         }
     }
 
@@ -29,11 +29,11 @@ public class JoinPlayer : NetworkBehaviour
     {
         playerName = newName;
         isFirstPlayer = isFirst;
-        EnterPlayer();
     }
-    public void EnterPlayer()
-    {
-        GameManager.Instance.AddPlayerOnServer(this);
-    }
+
+    /*    public void EnterPlayer()
+        {
+            GameManager.Instance.AddPlayerOnServer(this);
+        }*/
 
 }

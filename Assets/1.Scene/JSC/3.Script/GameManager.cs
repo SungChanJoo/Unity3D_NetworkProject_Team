@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
 
-    public readonly SyncList<JoinPlayer> PlayerList = new SyncList<JoinPlayer>();
+    //public readonly SyncList<JoinPlayer> PlayerList = new SyncList<JoinPlayer>();
 
 
     private void Awake()
@@ -39,13 +39,14 @@ public class GameManager : NetworkBehaviour
     }
 
 
-    public void AddPlayerOnServer(JoinPlayer playerInfo)
+/*    public void AddPlayerOnServer(JoinPlayer playerInfo)
     {
         PlayerList.Add(playerInfo);
-    }
+    }*/
 
     private void Update()
     {
+        PlayerNum = GameObject.FindGameObjectsWithTag("Player").Length;
         UpdatePlayerNum();
     }
     //클라이언트가 Server를 나갔을 때 
@@ -58,14 +59,7 @@ public class GameManager : NetworkBehaviour
 
     public void UpdatePlayerNum()
     {
-        if(PlayerList != null)
-        {
-            playerCount.text = $"{PlayerList.Count}/{PlayerMaxCount}";
-        }
-        else
-        {
-            Debug.Log("플레이어리스트가 널위한");
-        }
+        playerCount.text = $"{PlayerNum}/{PlayerMaxCount}";
     }
     void UpdateUI()
     {
