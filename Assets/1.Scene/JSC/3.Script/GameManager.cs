@@ -14,6 +14,9 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject startBtn;
     [SerializeField] private GameObject winnerUI_obj;
     public List<JoinPlayer> PlayerList = new List<JoinPlayer>();
+
+    
+
     public bool isFirstPlayer = false;
     private int isAliveCount = 0;
     WinnerUI winnerUI;
@@ -57,6 +60,7 @@ public class GameManager : NetworkBehaviour
                     }
                 }
                 PlayerNum = PlayerList.Count;
+                CreateRoomUI.Instance.UpdatePlayerImage(PlayerNum);
             }
             yield return null;
         }
