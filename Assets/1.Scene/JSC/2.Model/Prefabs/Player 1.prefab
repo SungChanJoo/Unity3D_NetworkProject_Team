@@ -182,6 +182,9 @@ MonoBehaviour:
   anim: {fileID: 0}
   networkAnimator: {fileID: 0}
   camera: {fileID: 0}
+  audioSource: {fileID: 0}
+  attactSound: {fileID: 0}
+  DieSound: {fileID: 0}
   Attack_Cool: 3
   gameObjects:
   - {fileID: 3722408627760931814}
@@ -285,7 +288,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  rpcControll: {fileID: 0}
+  isFirstPlayer: 0
+  playerName: 
+  IsDead: 0
 --- !u!1 &3722408627760931812
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,5 +824,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.01, z: 0.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.6, y: 1, z: 0.6}
+  m_Center: {x: 0, y: 0.5, z: 0}
