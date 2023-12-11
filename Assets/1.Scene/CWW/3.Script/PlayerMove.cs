@@ -23,9 +23,13 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private Animator anim;
     [SerializeField] private NetworkAnimator networkAnimator;
 
-
     [Header("Camera")]
     [SerializeField] private Camera camera;
+
+    [Header("AttackSound")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip attactSound;
+    [SerializeField] private AudioClip DieSound;
 
     private float Velocity;
     private float Stop = 0;
@@ -49,7 +53,8 @@ public class PlayerMove : NetworkBehaviour
         networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
         joinPlayer = GetComponent<JoinPlayer>();
-        Debug.Log("플레이어 : " + joinPlayer.playerName + " | " + joinPlayer.isFirstPlayer);
+        
+     //   Debug.Log("플레이어 : " + joinPlayer.playerName + " | " + joinPlayer.isFirstPlayer);
     }
     public override void OnStartLocalPlayer()
     {
@@ -195,6 +200,7 @@ public class PlayerMove : NetworkBehaviour
         isAttack = true;
         isAttackCool = true;
         anim.SetTrigger("Attack");
+        audioSource.PlayOneShot(attactSound);
         AnimationClip Attack = anim.runtimeAnimatorController.animationClips.FirstOrDefault(clip => clip.name == "Attack");
         yield return new WaitForSeconds(Attack.length);
         isAttack = false;
@@ -252,6 +258,27 @@ public class PlayerMove : NetworkBehaviour
         KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
         gameObject.SetActive(false);
         //Destroy(gameObject, 2f);
+    }
+
+
+    //클라이언트에서 소리를 서버로
+    public void SendSoundToServer()
+    {
+        CmdSendSoundToServer();
+    }
+
+    //서버에서 모든 클라이언트로 소리를 전달
+    [ClientRpc]
+    void RpcReceiveSoundOnClients()
+    {
+      //  audioSource.PlayOneShot(audioSource.clip);
+    }
+
+    //클라이언트에서 소리를 서버로
+    [Command]
+    void CmdSendSoundToServer()
+    {
+        RpcReceiveSoundOnClients();
     }
 
 }
