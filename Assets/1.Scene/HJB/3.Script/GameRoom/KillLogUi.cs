@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +8,7 @@ public class KillLogUi : MonoBehaviour
 {
     public static KillLogUi instance = null;
     private Coroutine hideCoroutine;
+    [SerializeField] Image Skull;
     void Awake()
     {
         if (instance == null)
@@ -16,7 +17,7 @@ public class KillLogUi : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject); // ÀÌ¹Ì ÀÎ½ºÅÏ½º°¡ ÀÖ´Ù¸é Áßº¹µÈ °ÍÀÌ¹Ç·Î ÆÄ±«
+            Destroy(gameObject); // ì´ë¯¸ ì¸ìŠ¤í„´ìŠ¤ê°€ ìˆë‹¤ë©´ ì¤‘ë³µëœ ê²ƒì´ë¯€ë¡œ íŒŒê´´
         }
     }
     [Header("KillLog")]
@@ -24,16 +25,17 @@ public class KillLogUi : MonoBehaviour
 
     public void DisplayKillLog(string attackr, string targetPlayer)
     {
+        string SkullImageCode = "â˜ ";
         killLogText.text += 
-            $"\n<color=#{ColorUtility.ToHtmlStringRGB(Color.red)}>{attackr}</color>ÀÌ(°¡) " +
-            $"<color=#{ColorUtility.ToHtmlStringRGB(Color.blue)}>{targetPlayer}</color>À»(¸¦) Á×¿´¾î¿ä!!";
+            $"\n{attackr}<color=#{ColorUtility.ToHtmlStringRGB(Color.red)}>  {SkullImageCode} " +
+            $"<color=#{ColorUtility.ToHtmlStringRGB(Color.white)}>{targetPlayer}";
 
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
         }
 
-        // 10ÃÊ ´ë±â
+        // 10ì´ˆ ëŒ€ê¸°
         hideCoroutine = StartCoroutine(HideKillLog());
     }
 

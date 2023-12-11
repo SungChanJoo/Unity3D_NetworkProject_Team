@@ -185,7 +185,6 @@ MonoBehaviour:
   camera: {fileID: 0}
   audioSource: {fileID: 7184956152571269702}
   attactSound: {fileID: 8300000, guid: 1c5d1c1bc589ee74e86c9921122c7097, type: 3}
-  BGM: {fileID: 8300000, guid: ac26fb5cb1aeac944826c53efb07b841, type: 3}
   Attack_Cool: 3
   gameObjects:
   - {fileID: 3722408627760931814}
