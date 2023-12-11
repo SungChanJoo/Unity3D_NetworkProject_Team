@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
@@ -14,6 +14,9 @@ public class JoinPlayer : NetworkBehaviour
 
     private void OnPlayerNameChanged(string oldName, string newName)
     {
+        if (!isLocalPlayer) return;
+        GameManager.Instance.isFirstPlayer = GameManager.Instance.PlayerList[0] == this;
+        Debug.Log($"í”Œë ˆì´ì–´ ì´ë¦„ {playerName} : {isFirstPlayer} | {IsDead}");
         Debug.Log($"Player name changed: {oldName} -> {newName}");
     }
 
@@ -21,7 +24,7 @@ public class JoinPlayer : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            // ·ÎÄÃ ÇÃ·¹ÀÌ¾îÀÎ °æ¿ì, ÀÌ¸§ ¼³Á¤
+            // ë¡œì»¬ í”Œë ˆì´ì–´ì¸ ê²½ìš°, ì´ë¦„ ì„¤ì •
             CmdSetPlayer(SQLManager.Instance.Info.User_name, false);
         }
     }
@@ -36,7 +39,7 @@ public class JoinPlayer : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPlayerDie()
     {
-        Debug.Log($"ÇÃ·¹ÀÌ¾î µÚÁü{playerName} : {isFirstPlayer} | {IsDead}");
+        Debug.Log($"í”Œë ˆì´ì–´ ë’¤ì§{playerName} : {isFirstPlayer} | {IsDead}");
         RPCHandlePlayerDie();
     }
     public void PlayerDie()
