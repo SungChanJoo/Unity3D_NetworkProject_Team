@@ -70,7 +70,7 @@ public class GameManager : NetworkBehaviour
                     }
                 }
                 PlayerNum = PlayerList.Count;
-                CreateRoomUI.Instance.UpdatePlayerImage(PlayerNum,PlayerList[0].playerName);
+                CreateRoomUI.Instance.UpdatePlayerImage(PlayerNum);
             }
             yield return null;
         }
