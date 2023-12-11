@@ -48,11 +48,4 @@ public class JoinPlayer : NetworkBehaviour
     {
         PlayerDie();
     }
-
-
-    /*    public void EnterPlayer()
-        {
-            GameManager.Instance.AddPlayerOnServer(this);
-        }*/
-
 }

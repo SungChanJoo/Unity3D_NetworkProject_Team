@@ -243,7 +243,6 @@ public class PlayerMove : NetworkBehaviour
             {
                 string attackPlayer = player.playerName;
                 string targetPlayer = joinPlayer.playerName;
-                Debug.Log("재백에 내 문제 아니다" + attackPlayer + " | " + targetPlayer);
                 joinPlayer.CmdPlayerDie();
                 CmdKill(attackPlayer, targetPlayer);
             }
