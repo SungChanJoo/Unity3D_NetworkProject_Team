@@ -14,6 +14,10 @@ public class JoinPlayer : NetworkBehaviour
 
     private void OnPlayerNameChanged(string oldName, string newName)
     {
+        if (!isLocalPlayer) return;
+        GameManager.Instance.isFirstPlayer = GameManager.Instance.PlayerList[0] == this;
+        Debug.Log($"플레이어 초기화{playerName} : {isFirstPlayer} | {IsDead}");
+
         Debug.Log($"Player name changed: {oldName} -> {newName}");
     }
 
@@ -22,7 +26,7 @@ public class JoinPlayer : NetworkBehaviour
         if (isLocalPlayer)
         {
             // 로컬 플레이어인 경우, 이름 설정
-            CmdSetPlayer(SQLManager.Instance.Info.User_name, GameManager.Instance.PlayerNum == 1);
+            CmdSetPlayer(SQLManager.Instance.Info.User_name, false);
         }
     }
 
@@ -36,7 +40,6 @@ public class JoinPlayer : NetworkBehaviour
     [Command(requiresAuthority = false)]
     public void CmdPlayerDie()
     {
-        Debug.Log($"플레이어 뒤짐{playerName} : {isFirstPlayer} | {IsDead}");
         RPCHandlePlayerDie();
     }
     public void PlayerDie()
@@ -47,6 +50,7 @@ public class JoinPlayer : NetworkBehaviour
     public void RPCHandlePlayerDie()
     {
         PlayerDie();
+        Debug.Log($"플레이어 뒤짐{playerName} : {isFirstPlayer} | {IsDead}");
     }
 
 

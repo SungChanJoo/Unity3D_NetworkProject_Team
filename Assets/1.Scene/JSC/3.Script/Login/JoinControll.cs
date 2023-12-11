@@ -11,7 +11,6 @@ public class JoinControll : MonoBehaviour
     public InputField Nick_i;
 
     [SerializeField] private Text _log;
-    [SerializeField] private GameObject JoinUI;
 
     public void JoinBtn()
     {
@@ -44,10 +43,8 @@ public class JoinControll : MonoBehaviour
             //회원가입 실패
             _log.text = "\n중복된 아이디 입니다.";
         }
-    }
 
-    public void CloseBtn()
-    {
-        JoinUI.SetActive(false);
+
+
     }
 }

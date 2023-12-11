@@ -10,16 +10,21 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager Instance = null;
     //[SerializeField] private Text chatText;
-    [SerializeField] private Text playerCount;
-    public int PlayerMaxCount = 2;
+    [SerializeField] private Text playerCount;    
+    public int PlayerMaxCount = 8;
     public int PlayerNum;
     //[SerializeField] private InputField inputfield;
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
-
+    [SerializeField] private GameObject winnerUI_obj;
     //public GameObject[] PlayerList;
     public List<JoinPlayer> PlayerList = new List<JoinPlayer>();
+    public bool isFirstPlayer = false;
+    private int isAliveCount=0;
 
+    WinnerUI winnerUI;
+    private string GameWinner;
+    private bool startGame = false;
 
     private void Awake()
     {
@@ -31,6 +36,7 @@ public class GameManager : NetworkBehaviour
         {
             Destroy(gameObject);
         }
+        winnerUI = winnerUI_obj.GetComponent<WinnerUI>();
     }
 
     public override void OnStartServer()
@@ -44,7 +50,9 @@ public class GameManager : NetworkBehaviour
         }*/
     IEnumerator UpdateList_co()
     {
-        while(true)
+        isFirstPlayer = GameManager.Instance.PlayerNum == 0;
+
+        while (true)
         {
             if (NetworkClient.active)
             {
@@ -62,6 +70,7 @@ public class GameManager : NetworkBehaviour
                     }
                 }
                 PlayerNum = PlayerList.Count;
+                CreateRoomUI.Instance.UpdatePlayerImage(PlayerNum);
             }
             yield return null;
         }
@@ -73,12 +82,32 @@ public class GameManager : NetworkBehaviour
     private void Update()
     {
         UpdatePlayerNumUI();
+
+        if (startGame)
+        {
+            for (int i = 0; i < PlayerList.Count; i++)
+            {
+                if (!PlayerList[i].IsDead && isAliveCount < 2)
+                {
+                    isAliveCount++;
+                    GameWinner = PlayerList[i].playerName;                    
+                }               
+                
+            }
+            if (isAliveCount == 1)
+            {
+                CmdWinnerUI(GameWinner);                
+            }
+            else
+            {
+                isAliveCount = 0;
+            }
+        }
     }
     //클라이언트가 Server를 나갔을 때 
     [ClientCallback]
     private void OnDestroy()
     {
-        Debug.Log("클라이언트 종료했어");
         if (!isLocalPlayer) return;
     }
 
@@ -97,9 +126,8 @@ public class GameManager : NetworkBehaviour
     [Client]
     public void StartBtn()
     {
-        if (true)
+        if (isFirstPlayer && PlayerNum >= 2 )
         {
-
             Debug.Log(isOwned + "시작해라 제발");
             CmdGameStart();
         }
@@ -119,5 +147,21 @@ public class GameManager : NetworkBehaviour
     private void RPCUpdateUI()
     {
         UpdateUI();
+        startGame = true;
     }
+
+    
+    private void CmdWinnerUI(string winner)
+    {
+        RPCWinnerUI(winner);
+    }
+
+    
+    private void RPCWinnerUI(string winner)
+    {
+        winnerUI_obj.SetActive(true);
+        winnerUI.WinnerUi(winner);
+        startGame = false;
+    }
+
 }
