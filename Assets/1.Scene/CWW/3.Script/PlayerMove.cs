@@ -49,6 +49,7 @@ public class PlayerMove : NetworkBehaviour
         networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
         joinPlayer = GetComponent<JoinPlayer>();
+        Debug.Log("플레이어 : " + joinPlayer.playerName + " | " + joinPlayer.isFirstPlayer);
     }
     public override void OnStartLocalPlayer()
     {
