@@ -25,7 +25,7 @@ public class JoinPlayer : NetworkBehaviour
         if (isLocalPlayer)
         {
             // 로컬 플레이어인 경우, 이름 설정
-            CmdSetPlayer(SQLManager.Instance.Info.User_name, false);
+            CmdSetPlayer(SQLManager.Instance.Info.User_Nickname, false);
         }
     }
 
