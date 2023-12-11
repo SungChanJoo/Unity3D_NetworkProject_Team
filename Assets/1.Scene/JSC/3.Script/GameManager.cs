@@ -24,6 +24,8 @@ public class GameManager : NetworkBehaviour
     private string GameWinner;
     private bool startGame = false;
     private int isAliveCountUI;
+
+    [SerializeField] private Transform[] spawnPos;
     private void Awake()
     {
         if (Instance == null)
@@ -142,6 +144,11 @@ public class GameManager : NetworkBehaviour
         UpdateUI();
         startGame = true;
         aliveUI_obj.SetActive(startGame);
+        for (int i = 0; i < PlayerList.Count; i++)
+        {
+            int rand = Random.Range(0, 7);
+            PlayerList[i].gameObject.transform.position = spawnPos[rand].transform.position;
+        }
     }
 
     private void CmdWinnerUI(string winner)
