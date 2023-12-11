@@ -84,6 +84,7 @@ public class GameManager : NetworkBehaviour
                 if (!PlayerList[i].IsDead && isAliveCount < 2)
                 {                    
                     GameWinner = PlayerList[i].playerName;
+                    isAliveCount++;
                 }
 
                 if (!PlayerList[i].IsDead)

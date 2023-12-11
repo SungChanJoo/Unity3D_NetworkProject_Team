@@ -89,7 +89,7 @@ public class PlayerMove : NetworkBehaviour
             }
             if(joinPlayer.IsDead && Input.GetKeyDown(KeyCode.Tab))
             {
-                //ChangeSpectatorPlayer();
+                ChangeSpectatorPlayer();
             }
         }
 
@@ -98,18 +98,27 @@ public class PlayerMove : NetworkBehaviour
     void ChangeSpectatorPlayer()
     {
         playerIndex++;
-        while (GameManager.Instance.PlayerList[playerIndex].IsDead == true)
+        // 플레이어가 죽어있으면
+        while (playerIndex < GameManager.Instance.PlayerList.Count && GameManager.Instance.PlayerList[playerIndex].IsDead == true)
         {
-            if (playerIndex < GameManager.Instance.PlayerList.Count)
+            playerIndex++;
+            if (GameManager.Instance.PlayerList[playerIndex].IsDead == false) // 살아있는 사람에게 변환
             {
-                playerIndex++;
-            }
-            if (GameManager.Instance.PlayerList[playerIndex].IsDead == false)
-            {
+                Debug.Log("관전자 변경");
+                if (freeLookCamera != null)
+                {
+                    // 현재 로컬 플레이어에 따라가도록 설정
+                    freeLookCamera.Follow = GameManager.Instance.PlayerList[playerIndex].transform;
+                    freeLookCamera.LookAt = GameManager.Instance.PlayerList[playerIndex].transform;
+                }
                 break;
             }
         }
-        if (playerIndex < GameManager.Instance.PlayerList.Count)
+        if(playerIndex >= GameManager.Instance.PlayerList.Count)
+        {
+            playerIndex = 0;
+        }
+        if (GameManager.Instance.PlayerList[playerIndex].IsDead == false) // 살아있는 사람에게 변환
         {
             Debug.Log("관전자 변경");
             if (freeLookCamera != null)
@@ -118,10 +127,6 @@ public class PlayerMove : NetworkBehaviour
                 freeLookCamera.Follow = GameManager.Instance.PlayerList[playerIndex].transform;
                 freeLookCamera.LookAt = GameManager.Instance.PlayerList[playerIndex].transform;
             }
-        }
-        else
-        {
-            playerIndex = 0;
         }
     }
     private void Player_Move()
@@ -288,8 +293,6 @@ public class PlayerMove : NetworkBehaviour
     {
         anim.SetTrigger("Die");
         isDie = true;
-        transform.GetComponent<Rigidbody>().isKinematic = true;
-        transform.GetComponent<Rigidbody>().useGravity = false;
         KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
         StartCoroutine(DieDelay());
         //Destroy(gameObject, 2f);
@@ -297,10 +300,7 @@ public class PlayerMove : NetworkBehaviour
     IEnumerator DieDelay()
     {
         yield return new WaitForSeconds(2f);
-        foreach (Transform child in transform)
-        {
-            child.gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
     }
 
 
