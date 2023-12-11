@@ -105,8 +105,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3722408627761168322}
   - component: {fileID: 3722408627753668646}
-  - component: {fileID: 8607774966316278815}
-  - component: {fileID: 1904696144579559838}
+  - component: {fileID: 3722408627760931813}
+  - component: {fileID: 3722408627760931815}
   - component: {fileID: 3722408627760931817}
   - component: {fileID: -4219430321245899753}
   - component: {fileID: -2782847795655865257}
@@ -155,7 +155,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8607774966316278815
+--- !u!114 &3722408627760931813
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -164,7 +164,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3722408627760931810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20e22b001b32e5140b3ae135841b480c, type: 3}
+  m_Script: {fileID: 11500000, guid: ddae4e40f3f8bb645acadc6dd184dfe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
@@ -181,8 +181,8 @@ MonoBehaviour:
   attack_col: {fileID: 7285958275257987834}
   anim: {fileID: 0}
   camera: {fileID: 0}
-  Attack_Cool: 0
---- !u!114 &1904696144579559838
+  Attack_Cool: 3
+--- !u!114 &3722408627760931815
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,12 +191,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3722408627760931810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2b5f5d517dd33f4c943381692fe1fe7, type: 3}
+  m_Script: {fileID: 11500000, guid: e19dcf5babf6ad141a9fdb74774f9fd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  gameObjects: []
 --- !u!54 &3722408627760931817
 Rigidbody:
   m_ObjectHideFlags: 0

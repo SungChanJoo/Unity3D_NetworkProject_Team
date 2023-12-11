@@ -6,31 +6,25 @@ using Mirror;
 
 public class CreateRoomUI : MonoBehaviour
 {
-    public static CreateRoomUI Instance = null;
+    [SerializeField] private List<Image> player_Img;
 
-    [SerializeField] private List<Image> player_Img;    
+    [SerializeField] private List<Button> playerCountButton;  
 
     
-    
-    private void Awake()
+
+    private CreateRoomData roomData;
+
+    private void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }        
+        roomData = new CreateRoomData() { MaxPlayerCout = 8 };
     }
-    
-    public void UpdatePlayerImage(int PlayerCount)
+    private void UpdatePlayerImage()
     {
-        
+        int PlayerCount = roomData.MaxPlayerCout;        
 
         for (int i = 0; i < player_Img.Count; i++)
         {
-            if (i<PlayerCount)
+            if (i<roomData.MaxPlayerCout)
             {
                 player_Img[i].gameObject.SetActive(true);
             }
@@ -41,6 +35,14 @@ public class CreateRoomUI : MonoBehaviour
         }
     }
 
-    
+    public void UpdateMaxPlayerCount(int count)
+    {
+        roomData.MaxPlayerCout = count;
+        
+        UpdatePlayerImage();
+    } 
 }
-
+public class CreateRoomData
+{
+    public int MaxPlayerCout;
+}

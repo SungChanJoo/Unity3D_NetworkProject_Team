@@ -543,7 +543,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -755,7 +755,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -963,7 +963,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -1491,7 +1491,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -3326,7 +3326,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -3958,7 +3958,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -4017,6 +4017,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1592110176}
+  - component: {fileID: 1592110177}
   m_Layer: 5
   m_Name: CreateRoom
   m_TagString: Untagged
@@ -4048,6 +4049,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1592110177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592110175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62b332836b658ce4e88c67c3dfff29b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player_Img:
+  - {fileID: 66759174}
+  - {fileID: 249273018}
+  - {fileID: 823530554}
+  - {fileID: 1677673691}
+  - {fileID: 1210287983}
+  - {fileID: 2021605715}
+  - {fileID: 783188646}
+  - {fileID: 130760055}
+  playerCountButton:
+  - {fileID: 213143619}
+  - {fileID: 1270140899}
+  - {fileID: 1843705835}
+  - {fileID: 500334663}
+  - {fileID: 2097366754}
+  - {fileID: 148430685}
+  - {fileID: 1523097274}
+  - {fileID: 264612383}
 --- !u!1 &1598210702
 GameObject:
   m_ObjectHideFlags: 0
@@ -4606,7 +4637,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
@@ -5231,7 +5262,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1592110177}
         m_TargetAssemblyTypeName: CreateRoomUI, Assembly-CSharp
         m_MethodName: UpdateMaxPlayerCount
         m_Mode: 3
