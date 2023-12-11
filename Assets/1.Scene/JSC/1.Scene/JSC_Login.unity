@@ -250,9 +250,13 @@ RectTransform:
   - {fileID: 1551417308}
   - {fileID: 611159198}
   m_Father: {fileID: 847985894}
+<<<<<<< HEAD
 
   m_RootOrder: 5
 
+=======
+  m_RootOrder: 4
+>>>>>>> parent of 919cbd0 ([fix] conflic resolve)
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -368,7 +372,11 @@ RectTransform:
   - {fileID: 768652915}
   - {fileID: 1150724246}
   m_Father: {fileID: 847985894}
+<<<<<<< HEAD
   m_RootOrder: 2
+=======
+  m_RootOrder: 3
+>>>>>>> parent of 919cbd0 ([fix] conflic resolve)
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1048,6 +1056,10 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+<<<<<<< HEAD
+=======
+  - {fileID: 863146590}
+>>>>>>> parent of 919cbd0 ([fix] conflic resolve)
   - {fileID: 1316358377}
   - {fileID: 2070063449}
   - {fileID: 311931573}
@@ -1145,7 +1157,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 847985894}
+<<<<<<< HEAD
   m_RootOrder: 4
+=======
+  m_RootOrder: 5
+>>>>>>> parent of 919cbd0 ([fix] conflic resolve)
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5710,7 +5726,7 @@ RectTransform:
   m_Children:
   - {fileID: 164467483}
   m_Father: {fileID: 847985894}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -10282,7 +10298,7 @@ RectTransform:
   m_Children:
   - {fileID: 341419008}
   m_Father: {fileID: 847985894}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
