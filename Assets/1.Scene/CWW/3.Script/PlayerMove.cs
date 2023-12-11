@@ -104,7 +104,7 @@ public class PlayerMove : NetworkBehaviour
             {
                 playerIndex++;
             }
-            else
+            if (GameManager.Instance.PlayerList[playerIndex].IsDead == false)
             {
                 break;
             }
