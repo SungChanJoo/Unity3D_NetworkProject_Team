@@ -99,9 +99,8 @@ public class PlayerMove : NetworkBehaviour
     {
         playerIndex++;
         // 플레이어가 죽어있으면
-        while (playerIndex < GameManager.Instance.PlayerList.Count && GameManager.Instance.PlayerList[playerIndex].IsDead == true)
+        while (playerIndex < GameManager.Instance.PlayerList.Count)
         {
-            playerIndex++;
             if (GameManager.Instance.PlayerList[playerIndex].IsDead == false) // 살아있는 사람에게 변환
             {
                 Debug.Log("관전자 변경");
@@ -113,20 +112,11 @@ public class PlayerMove : NetworkBehaviour
                 }
                 break;
             }
+            playerIndex++;
         }
         if(playerIndex >= GameManager.Instance.PlayerList.Count)
         {
             playerIndex = 0;
-        }
-        if (GameManager.Instance.PlayerList[playerIndex].IsDead == false) // 살아있는 사람에게 변환
-        {
-            Debug.Log("관전자 변경");
-            if (freeLookCamera != null)
-            {
-                // 현재 로컬 플레이어에 따라가도록 설정
-                freeLookCamera.Follow = GameManager.Instance.PlayerList[playerIndex].transform;
-                freeLookCamera.LookAt = GameManager.Instance.PlayerList[playerIndex].transform;
-            }
         }
     }
     private void Player_Move()
@@ -300,7 +290,11 @@ public class PlayerMove : NetworkBehaviour
     IEnumerator DieDelay()
     {
         yield return new WaitForSeconds(2f);
-        gameObject.SetActive(false);
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+        //gameObject.SetActive(false);
     }
 
 

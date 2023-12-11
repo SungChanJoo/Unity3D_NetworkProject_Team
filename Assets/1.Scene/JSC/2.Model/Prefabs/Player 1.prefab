@@ -185,7 +185,6 @@ MonoBehaviour:
   camera: {fileID: 0}
   audioSource: {fileID: 309174668229650799}
   attactSound: {fileID: 8300000, guid: 1c5d1c1bc589ee74e86c9921122c7097, type: 3}
-  DieSound: {fileID: 0}
   Attack_Cool: 3
   gameObjects:
   - {fileID: 3722408627760931814}
@@ -921,5 +920,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6, y: 0.05, z: 0.6}
+  m_Size: {x: 0.6, y: 0.1, z: 0.6}
   m_Center: {x: 0, y: 0, z: 0}
