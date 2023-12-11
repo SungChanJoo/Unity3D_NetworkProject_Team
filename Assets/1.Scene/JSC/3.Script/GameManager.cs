@@ -22,6 +22,7 @@ public class GameManager : NetworkBehaviour
     WinnerUI winnerUI;
     private string GameWinner;
     private bool startGame = false;
+    private int isAliveCountUI=1;
     private void Awake()
     {
         if (Instance == null)
@@ -81,7 +82,19 @@ public class GameManager : NetworkBehaviour
                     isAliveCount++;
                     GameWinner = PlayerList[i].playerName;
                 }
+
+                if (!PlayerList[i].IsDead)
+                {
+                    isAliveCountUI++;
+                }
+                else
+                {
+                    isAliveCountUI--;
+                }
             }
+
+            AliveUI.Instance.IsAliveUI(isAliveCountUI);
+            
             if (isAliveCount == 1)
             {
                 CmdWinnerUI(GameWinner);
@@ -90,6 +103,7 @@ public class GameManager : NetworkBehaviour
             {
                 isAliveCount = 0;
             }
+            
         }
     }
     [ClientCallback]
