@@ -5,6 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+
   - enabled: 0
     path: Assets/1.Scene/JSC/1.Scene/JSC_Test_GamePlay.unity
     guid: 8cc6d8ac7813064439c242ad4a678c67
@@ -32,4 +33,5 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
     guid: ddf1b4c05107bce4fa162dd4c7f59683
+
   m_configObjects: {}

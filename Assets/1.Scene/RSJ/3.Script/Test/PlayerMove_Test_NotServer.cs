@@ -5,7 +5,7 @@ using Cinemachine;
 using System.Linq;
 using Mirror;
 
-public class PlayerMove_Test : NetworkBehaviour
+public class PlayerMove_Test_NotServer : MonoBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private CinemachineFreeLook LookatCamera;
@@ -43,11 +43,10 @@ public class PlayerMove_Test : NetworkBehaviour
         TryGetComponent(out anim);
         camera = GameObject.Find("Camera").GetComponent<Camera>();
     }
-    public override void OnStartLocalPlayer()
+
+    private void Start()
     {
-        base.OnStartLocalPlayer();
         Cinemachine.CinemachineFreeLook freeLookCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
-        if (!isLocalPlayer) return;
         if (freeLookCamera != null)
         {
             // 현재 로컬 플레이어에 따라가도록 설정
@@ -55,21 +54,21 @@ public class PlayerMove_Test : NetworkBehaviour
             freeLookCamera.LookAt = transform;
         }
     }
+    
     void Update()
     {
         CoolTime();
-        if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
+        
+        if (!isAttack)
         {
-            if (!isAttack)
-            {
-                Player_Move();
-            }
-
-            if (!isAttack && Input.GetKeyDown(KeyCode.Space) && !isAttackCool)
-            {
-                Start_Player_Attack();
-            }
+            Player_Move();
         }
+
+        if (!isAttack && Input.GetKeyDown(KeyCode.Space) && !isAttackCool)
+        {
+            Start_Player_Attack();
+        }
+        
 
 
     }
@@ -161,13 +160,11 @@ public class PlayerMove_Test : NetworkBehaviour
     }
 
 
-    [Command] //서버에다 요청
     private void Start_Player_Attack()
     {
         RpcPlayerAttack();
     }
 
-    [ClientRpc] // 서버에서 실행
     private void RpcPlayerAttack()
     {
         StartCoroutine(PlayerAttack_co());
@@ -178,25 +175,25 @@ public class PlayerMove_Test : NetworkBehaviour
         isAttack = true;
         isAttackCool = true;
         anim.SetTrigger("Attack");
-        AnimationClip Attack = anim.runtimeAnimatorController.animationClips.FirstOrDefault(clip => clip.name == "Attack_Test");
+        AnimationClip Attack = anim.runtimeAnimatorController.animationClips.FirstOrDefault(clip => clip.name == "Attack");
         yield return new WaitForSeconds(Attack.length);
         isAttack = false;
         yield return new WaitForSeconds(Attack_Cool - Attack.length);
         isAttackCool = false;
-        //anim.ResetTrigger("Attack");
+        anim.ResetTrigger("Attack");
     }
     
 
-    [ClientRpc]
-    public void OnAttackColider()
-    {
-        if (this.isLocalPlayer) attack_col.enabled = true;
-    }
-    [ClientRpc]
-    public void OffAttackColider()
-    {
-        if(this.isLocalPlayer) attack_col.enabled = false;
-    }
+    //[ClientRpc]
+    //public void OnAttackColider()
+    //{
+    //    if (this.isLocalPlayer) attack_col.enabled = true;
+    //}
+    //[ClientRpc]
+    //public void OffAttackColider()
+    //{
+    //    if(this.isLocalPlayer) attack_col.enabled = false;
+    //}
 
 
 
