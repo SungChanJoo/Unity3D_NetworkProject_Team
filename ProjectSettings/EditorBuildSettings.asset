@@ -5,10 +5,33 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+
+  - enabled: 0
+    path: Assets/1.Scene/JSC/1.Scene/JSC_Test_GamePlay.unity
+    guid: 8cc6d8ac7813064439c242ad4a678c67
   - enabled: 1
-    path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
-    guid: ddf1b4c05107bce4fa162dd4c7f59683
-  - enabled: 1
+    path: Assets/1.Scene/JSC/1.Scene/JSC_Test_Lobby.unity
+    guid: 6e5eeae7e71cd16418511bd2b4554f06
+  - enabled: 0
+    path: Assets/Mirror/Examples/Room/Scenes/OfflineScene.unity
+    guid: 9e6f14982412b2545a0911ebaaa46a23
+  - enabled: 0
+    path: Assets/Mirror/Examples/Room/Scenes/OnlineScene.unity
+    guid: d7a6763559b31854586c9e49916273ef
+  - enabled: 0
+    path: Assets/1.Scene/HJB/1.Scene/GamePlay.unity
+    guid: 519cc553b81831b4ca15b01aff55f75d
+  - enabled: 0
+    path: Assets/1.Scene/CWW/1.Scene/Test.unity
+    guid: 01e8418ff07691e448998b063e350064
+  - enabled: 0
+    path: Assets/1.Scene/JSC/1.Scene/JSC_Test_Server.unity
+    guid: 303629f7fa6157047969673049ec64a7
+  - enabled: 0
     path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround_Server.unity
     guid: c3ade8fb3afd06e4fb9187cda0f9f8fb
+  - enabled: 0
+    path: Assets/1.Scene/RSJ/1.Scene/RSJ_PlayGround.unity
+    guid: ddf1b4c05107bce4fa162dd4c7f59683
+
   m_configObjects: {}

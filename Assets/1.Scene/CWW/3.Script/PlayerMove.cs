@@ -21,6 +21,8 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private Collider attack_col;
 
     [SerializeField] private Animator anim;
+    [SerializeField] private NetworkAnimator networkAnimator;
+
 
     [Header("Camera")]
     [SerializeField] private Camera camera;
@@ -38,14 +40,21 @@ public class PlayerMove : NetworkBehaviour
 
     [Header("Att_cool")]
     [SerializeField] private float Attack_Cool = 0f;
+
+    JoinPlayer joinPlayer;
+    [SyncVar] private bool isDie = false;
     private void Awake()
     {
         TryGetComponent(out anim);
+        networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
+        joinPlayer = GetComponent<JoinPlayer>();
     }
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
+
+
         Cinemachine.CinemachineFreeLook freeLookCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
         if (!isLocalPlayer) return;
         if (freeLookCamera != null)
@@ -57,9 +66,10 @@ public class PlayerMove : NetworkBehaviour
     }
     void Update()
     {
-        CoolTime();
+        
         if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
+            CoolTime();
             if (!isAttack)
             {
                 Player_Move();
@@ -73,20 +83,7 @@ public class PlayerMove : NetworkBehaviour
 
 
     }
-    private void CoolTime()
-    {
-        cooldownTimer += Time.deltaTime;
 
-        if (cooldownTimer >= 0.3f)
-        {
-            cooldownTimer = 0.0f;
-            isCooldown = false;
-        }
-        else
-        {
-            isCooldown = true;
-        }
-    }
 
     private void Player_Move()
     {
@@ -106,7 +103,7 @@ public class PlayerMove : NetworkBehaviour
             anim.SetBool("isRun", isrun);
             if (!isCooldown)
             {
-                StartCoroutine(CreateRunEffect());
+                CmdCreateRunEffect();
             }
         }
         else
@@ -140,6 +137,16 @@ public class PlayerMove : NetworkBehaviour
         }
     }
 
+    [Command]
+    private void CmdCreateRunEffect()
+    {
+        RPCCreateUnEffect();
+    }
+    [ClientRpc]
+    private void RPCCreateUnEffect()
+    {
+        StartCoroutine(CreateRunEffect());
+    }
     IEnumerator CreateRunEffect()
     {
         Vector3 offset = new Vector3(0, 1.5f, 0);
@@ -160,12 +167,28 @@ public class PlayerMove : NetworkBehaviour
         Destroy(runEffect);
     }
 
+    private void CoolTime()
+    {
+        cooldownTimer += Time.deltaTime;
+
+        if (cooldownTimer >= 0.3f)
+        {
+            cooldownTimer = 0.0f;
+            isCooldown = false;
+        }
+        else
+        {
+            isCooldown = true;
+        }
+    }
+
 
     [Command]
     private void Start_Player_Attack()
     {
-        StartCoroutine(Player_Attack());
+        RpcPlayerAttack();
     }
+    
     private IEnumerator Player_Attack()
     {
         isAttack = true;
@@ -176,22 +199,58 @@ public class PlayerMove : NetworkBehaviour
         isAttack = false;
         yield return new WaitForSeconds(Attack_Cool - Attack.length);
         isAttackCool = false;
-
     }
 
     [ClientRpc]
+    void RpcPlayerAttack()
+    {
+        StartCoroutine(Player_Attack());
+    }
+
     public void OnAttackColider()
     {
         if (this.isLocalPlayer) attack_col.enabled = true;
     }
-    [ClientRpc]
     public void OffAttackColider()
     {
         if(this.isLocalPlayer) attack_col.enabled = false;
     }
 
+    private BoxCollider colider;
+    [SerializeField] GameObject[] gameObjects;
+
+    
+
+    [Command(requiresAuthority = false)]
+    private void CmdKill(string attacker, string targetPlayer)
+    {
+        RPCKill(attacker, targetPlayer);
+    }
 
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Attack"))
+        {
+            if (other.transform.root.TryGetComponent(out JoinPlayer player))
+            {
+                string attackPlayer = player.playerName;
+                string targetPlayer = joinPlayer.playerName;
+                Debug.Log("재백에 내 문제 아니다" + attackPlayer + " | " + targetPlayer);
+                joinPlayer.CmdPlayerDie();
+                CmdKill(attackPlayer, targetPlayer);
+            }
+        }
+    }
+    [ClientRpc]
+    private void RPCKill(string attacker, string targetPlayer)
+    {
+        anim.SetTrigger("Die");
+        isDie = true;
 
+        KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
+        gameObject.SetActive(false);
+        //Destroy(gameObject, 2f);
+    }
 
 }

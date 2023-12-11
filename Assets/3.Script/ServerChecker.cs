@@ -68,6 +68,7 @@ public class ServerChecker : MonoBehaviour
     {
         List<Item> item = new List<Item>();
         item.Add(new Item("1", "127.0.0.1", "7777"));
+        //item.Add(new Item("1", "13.125.205.214", "7777"));
 
         JsonData data = JsonMapper.ToJson(item);
         File.WriteAllText(path + "/License.json", data.ToString());
@@ -116,7 +117,7 @@ public class ServerChecker : MonoBehaviour
         else
         {
             Debug.Log("스타트! Client");
-            //Start_Client();
+            Start_Client();
         }
 
     }
@@ -139,8 +140,11 @@ public class ServerChecker : MonoBehaviour
             {
                 Debug.Log($"client DisConnect : {NetworkConnectionToClient.address}");
             };
+            //Debug.Log("StartServer(), 플레이어수" + ServerManager.Instance.PlayerNum);
+
         }
     }
+
 
 
     public void Start_Client()

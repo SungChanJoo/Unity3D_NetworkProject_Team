@@ -4,61 +4,41 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 
-
-public class KillLogManager : NetworkBehaviour
+public class KillLogUi : MonoBehaviour
 {
-    public static KillLogManager instance;
-
+    public static KillLogUi instance = null;
+    private Coroutine hideCoroutine;
     void Awake()
     {
         if (instance == null)
+        {
             instance = this;
+        }
         else
-            Destroy(gameObject);
+        {
+            Destroy(gameObject); // 이미 인스턴스가 있다면 중복된 것이므로 파괴
+        }
     }
-
-    [Server]
-    public void RpcDisplayKillLog(byte playerNumber)
-    {
-        RpcUpdateKillLog(playerNumber);
-    }
-
-    [ClientRpc]
-    void RpcUpdateKillLog(byte playerNumber)
-    {
-        // 여기서 킬로그를 각 클라이언트의 KillLogUi에 전달
-        KillLogUi.instance?.DisplayKillLog(playerNumber);
-    }
-}
-
-
-public class KillLogUi : NetworkBehaviour
-{
-    public static KillLogUi instance;
-
     [Header("KillLog")]
     [SerializeField] private Text killLogText;
 
-
-    [SyncVar(hook = nameof(OnPlayerNumberChanged))]
-    public byte playerNumber;
-
-    
-    public event System.Action<byte> OnPlayerKill;
-
-    public void DisplayKillLog(byte playerNumber)
-    {               
-        killLogText.text = $"DIE : {playerNumber}";
-        
-        //StartCoroutine(HideKillLog());
-    }
-    void OnPlayerNumberChanged(byte _, byte newPlayerNumber)
+    public void DisplayKillLog(string attackr, string targetPlayer)
     {
-        // 이벤트 호출
-        OnPlayerKill?.Invoke(newPlayerNumber);
-    }
-    
+        killLogText.text += 
+            $"\n<color=#{ColorUtility.ToHtmlStringRGB(Color.red)}>{attackr}</color>이(가) " +
+            $"<color=#{ColorUtility.ToHtmlStringRGB(Color.blue)}>{targetPlayer}</color>을(를) 죽였어요!!";
 
+        if (hideCoroutine != null)
+        {
+            StopCoroutine(hideCoroutine);
+        }
+
+        // 10초 대기
+        hideCoroutine = StartCoroutine(HideKillLog());
+    }
+
+
+    
 
     private IEnumerator HideKillLog()
     {

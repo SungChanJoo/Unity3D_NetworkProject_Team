@@ -10,7 +10,7 @@ public class DumbAI : NetworkBehaviour
         idle =0,
         walk,
         playing
-    }
+    }   
 
     public float speed = 5f;
     private float idle_Time; // 가만히 있을 시간
@@ -22,6 +22,7 @@ public class DumbAI : NetworkBehaviour
     private State currentState;
 
     private Animator animator;
+    [SyncVar] private bool isDie = false;
 
     private void Start()
     {
@@ -29,18 +30,20 @@ public class DumbAI : NetworkBehaviour
         currentState = initState;
         idle_Time = Random.Range(0f, 3f);
 
-    }
-
+    }   
     [ServerCallback]
     private void Update()
     {
-        if (currentState == State.idle) // 가만히 있는 상태면
+        if (!isDie)
         {
-            Idle();
-        }
-        else if (currentState == State.walk)
-        {
-            Walk();
+            if (currentState == State.idle) // 가만히 있는 상태면
+            {
+                Idle();
+            }
+            else if (currentState == State.walk)
+            {
+                Walk();
+            }
         }
     }
 
@@ -99,23 +102,29 @@ public class DumbAI : NetworkBehaviour
     }
 
     [ClientRpc] // 서버에서 실행되고 클라이언트들에게 정보 전달
-    private void RpcPlayDieAnimation()
-    {
+    private void RpcPlayDieAnimation(string attacker)
+    {        
+        KillLogUi.instance.DisplayKillLog(attacker, $"AI");
         animator.SetTrigger("Die");
         this.gameObject.GetComponent<DumbAI>().enabled = false;
         Destroy(gameObject, 2f);
     }
 
     [Command(requiresAuthority = false)] // 클라이언트 -> 서버 호출 , 서버에게 정보를 처리해달라고 요청함, 그러면 저 메서드 안에 있는 메서드가 서버에서 실행
-    private void CmdHandleAttack()
-    {
-        RpcPlayDieAnimation();
+    private void CmdHandleAttack(string attacker)
+    {        
+        isDie = true;
+        RpcPlayDieAnimation(attacker);
     }
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Attack"))
         {
-            CmdHandleAttack();
+            if (other.transform.root.TryGetComponent(out JoinPlayer attackerName))
+            {                
+                string attacker = attackerName.playerName;
+                CmdHandleAttack(attacker);                
+            }
         }
     }
 

@@ -49,6 +49,7 @@ namespace Mirror
         /// <summary>True if this object is on the server and has been spawned.</summary>
         // This is different from NetworkServer.active, which is true if the
         // server itself is active rather than this object being active.
+
         public bool isServer => netIdentity.isServer;
 
         /// <summary>True if this object is on the client and has been spawned by the server.</summary>
