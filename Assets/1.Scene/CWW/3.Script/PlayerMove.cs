@@ -78,7 +78,7 @@ public class PlayerMove : NetworkBehaviour
         if (this.isLocalPlayer) //자기자신인지 확인하는 용도 network에서 .
         {
             CoolTime();
-            if (!isAttack)
+            if (!isAttack && !isDie)
             {
                 Player_Move();
             }
@@ -89,7 +89,7 @@ public class PlayerMove : NetworkBehaviour
             }
             if(joinPlayer.IsDead && Input.GetKeyDown(KeyCode.Tab))
             {
-                ChangeSpectatorPlayer();
+                //ChangeSpectatorPlayer();
             }
         }
 
@@ -275,7 +275,6 @@ public class PlayerMove : NetworkBehaviour
             if (other.transform.root.TryGetComponent(out JoinPlayer player))
             {
 
-                ChangeSpectatorPlayer();
                 string attackPlayer = player.playerName;
                 string targetPlayer = joinPlayer.playerName;
                 joinPlayer.CmdPlayerDie();
