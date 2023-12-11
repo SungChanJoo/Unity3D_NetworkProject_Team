@@ -2297,7 +2297,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 331670870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 135948f15627f41439d9e95002875f66, type: 3}
+  m_Script: {fileID: 11500000, guid: f1298eb6214e41d4b85732d6fdb77e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   killLogText: {fileID: 1814156316}
@@ -2826,10 +2826,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   playerCount: {fileID: 1899091775}
-  PlayerMaxCount: 2
+  PlayerMaxCount: 8
   PlayerNum: 0
   cavas: {fileID: 856206506}
-  winnerUI_obj: {fileID: 0}
+  startBtn: {fileID: 258656284}
+  winnerUI_obj: {fileID: 331670870}
   PlayerList: []
   isFirstPlayer: 0
 --- !u!4 &388794511
