@@ -9,8 +9,8 @@ public class PlayerMove : NetworkBehaviour
 {
     [SerializeField] private GameObject player;
     [SerializeField] private CinemachineFreeLook LookatCamera;
-    [SerializeField] private float WalkSpeed = 10f;
-    [SerializeField] private float RunSpeed = 15f;
+    [SerializeField] private float WalkSpeed = 15f;
+    [SerializeField] private float RunSpeed = 22f;
     [SerializeField] private float yVelocity = 0;
     [SerializeField] private float xVelocity = 0;
     [SerializeField] private float RotationSpeed = 3f;
