@@ -125,7 +125,7 @@ public class GameManager : NetworkBehaviour
     [Client]
     public void StartBtn()
     {
-        if (isFirstPlayer && PlayerNum <= 2 )
+        if (isFirstPlayer && PlayerNum >= 2 )
         {
             Debug.Log(isOwned + "시작해라 제발");
             CmdGameStart();

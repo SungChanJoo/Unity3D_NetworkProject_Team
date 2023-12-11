@@ -773,7 +773,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   playerCount: {fileID: 1899091775}
-  PlayerMaxCount: 2
+  PlayerMaxCount: 8
   PlayerNum: 0
   cavas: {fileID: 856206506}
   startBtn: {fileID: 258656284}
