@@ -27,8 +27,8 @@ public class KillLogUi : MonoBehaviour
     {
         string SkullImageCode = "☠";
         killLogText.text += 
-            $"\n{attackr}<color=#{ColorUtility.ToHtmlStringRGB(Color.red)}>  {SkullImageCode} " +
-            $"<color=#{ColorUtility.ToHtmlStringRGB(Color.white)}>{targetPlayer}";
+            $"\n{attackr}<color=#{ColorUtility.ToHtmlStringRGB(Color.red)}>{SkullImageCode}</color> " +
+            $"<color=#{ColorUtility.ToHtmlStringRGB(Color.white)}>{targetPlayer}</color>";
 
         if (hideCoroutine != null)
         {
