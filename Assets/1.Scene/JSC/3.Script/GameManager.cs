@@ -13,6 +13,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject cavas;
     [SerializeField] private GameObject startBtn;
     [SerializeField] private GameObject winnerUI_obj;
+    [SerializeField] private GameObject aliveUI_obj;
     public List<JoinPlayer> PlayerList = new List<JoinPlayer>();
 
     
@@ -22,7 +23,7 @@ public class GameManager : NetworkBehaviour
     WinnerUI winnerUI;
     private string GameWinner;
     private bool startGame = false;
-    private int isAliveCountUI=1;
+    private int isAliveCountUI;
     private void Awake()
     {
         if (Instance == null)
@@ -75,22 +76,18 @@ public class GameManager : NetworkBehaviour
         UpdatePlayerNumUI();
         if (startGame)
         {
+            isAliveCountUI = 0;
             for (int i = 0; i < PlayerList.Count; i++)
             {
                 if (!PlayerList[i].IsDead && isAliveCount < 2)
-                {
-                    isAliveCount++;
+                {                    
                     GameWinner = PlayerList[i].playerName;
                 }
 
                 if (!PlayerList[i].IsDead)
                 {
                     isAliveCountUI++;
-                }
-                else
-                {
-                    isAliveCountUI--;
-                }
+                }               
             }
 
             AliveUI.Instance.IsAliveUI(isAliveCountUI);
@@ -144,6 +141,7 @@ public class GameManager : NetworkBehaviour
     {
         UpdateUI();
         startGame = true;
+        aliveUI_obj.SetActive(startGame);
     }
 
     private void CmdWinnerUI(string winner)
@@ -153,7 +151,7 @@ public class GameManager : NetworkBehaviour
 
     private void RPCWinnerUI(string winner)
     {
-        winnerUI_obj.SetActive(true);
+        winnerUI_obj.SetActive(true);        
         winnerUI.WinnerUi(winner);
         startGame = false;
     }
