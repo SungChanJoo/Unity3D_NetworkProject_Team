@@ -45,6 +45,9 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private float Attack_Cool = 0f;
 
     JoinPlayer joinPlayer;
+    Cinemachine.CinemachineFreeLook freeLookCamera;
+    int playerIndex = 0;
+
     [SyncVar] private bool isDie = false;
     private void Awake()
     {
@@ -60,7 +63,7 @@ public class PlayerMove : NetworkBehaviour
         base.OnStartLocalPlayer();
 
 
-        Cinemachine.CinemachineFreeLook freeLookCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
+        freeLookCamera = FindObjectOfType<Cinemachine.CinemachineFreeLook>();
         if (!isLocalPlayer) return;
         if (freeLookCamera != null)
         {
@@ -84,12 +87,43 @@ public class PlayerMove : NetworkBehaviour
             {
                 Start_Player_Attack();
             }
+            if(joinPlayer.IsDead && Input.GetKeyDown(KeyCode.Tab))
+            {
+                ChangeSpectatorPlayer();
+            }
         }
-
 
     }
 
-
+    void ChangeSpectatorPlayer()
+    {
+        playerIndex++;
+        while (GameManager.Instance.PlayerList[playerIndex].IsDead == true)
+        {
+            if (playerIndex < GameManager.Instance.PlayerList.Count)
+            {
+                playerIndex++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        if (playerIndex < GameManager.Instance.PlayerList.Count)
+        {
+            Debug.Log("관전자 변경");
+            if (freeLookCamera != null)
+            {
+                // 현재 로컬 플레이어에 따라가도록 설정
+                freeLookCamera.Follow = GameManager.Instance.PlayerList[playerIndex].transform;
+                freeLookCamera.LookAt = GameManager.Instance.PlayerList[playerIndex].transform;
+            }
+        }
+        else
+        {
+            playerIndex = 0;
+        }
+    }
     private void Player_Move()
     {
         Velocity = WalkSpeed;
@@ -240,6 +274,8 @@ public class PlayerMove : NetworkBehaviour
         {
             if (other.transform.root.TryGetComponent(out JoinPlayer player))
             {
+
+                ChangeSpectatorPlayer();
                 string attackPlayer = player.playerName;
                 string targetPlayer = joinPlayer.playerName;
                 joinPlayer.CmdPlayerDie();
@@ -247,15 +283,25 @@ public class PlayerMove : NetworkBehaviour
             }
         }
     }
+
     [ClientRpc]
     private void RPCKill(string attacker, string targetPlayer)
     {
         anim.SetTrigger("Die");
         isDie = true;
-
+        transform.GetComponent<Rigidbody>().isKinematic = true;
+        transform.GetComponent<Rigidbody>().useGravity = false;
         KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
-        gameObject.SetActive(false);
+        StartCoroutine(DieDelay());
         //Destroy(gameObject, 2f);
+    }
+    IEnumerator DieDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
 

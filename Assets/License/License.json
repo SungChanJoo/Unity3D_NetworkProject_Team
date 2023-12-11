@@ -1,13 +1,8 @@
 [
   {
     "License": "2",
-    "ServerIP": "13.125.205.214",
+    "ServerIP": "127.0.0.1",
     "Port": "7777"
   }
 ]
-
-<<<<<<< Updated upstream
-[{"License":"2","ServerIP":"13.125.205.214","Port":"7777"}]
-=======
->>>>>>> Stashed changes
 
