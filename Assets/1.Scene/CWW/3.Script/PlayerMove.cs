@@ -29,7 +29,6 @@ public class PlayerMove : NetworkBehaviour
     [Header("AttackSound")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip attactSound;
-    [SerializeField] private AudioClip DieSound;
 
     private float Velocity;
     private float Stop = 0;
