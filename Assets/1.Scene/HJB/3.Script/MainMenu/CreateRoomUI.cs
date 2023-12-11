@@ -7,8 +7,10 @@ using Mirror;
 public class CreateRoomUI : MonoBehaviour
 {
     [SerializeField] private List<Image> player_Img;
+    [SerializeField] private Text[] LobbyPlayerName;
     public static CreateRoomUI Instance = null;
-
+    
+    
     private void Awake()
     {
         if (Instance == null)
@@ -29,10 +31,12 @@ public class CreateRoomUI : MonoBehaviour
             if (i < PlayerCount)
             {
                 player_Img[i].gameObject.SetActive(true);
+                LobbyPlayerName[i].text = $"{GameManager.Instance.PlayerList[i].playerName}";
             }
             else
             {
                 player_Img[i].gameObject.SetActive(false);
+                LobbyPlayerName[i].text = "";
             }
         }
     }
