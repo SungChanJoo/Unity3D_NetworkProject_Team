@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 1309551745}
   - component: {fileID: 1309551748}
   - component: {fileID: 1309551747}
+  - component: {fileID: 1309551749}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -221,14 +222,14 @@ MonoBehaviour:
   autoConnectClientBuild: 0
   sendRate: 60
   offlineScene: 
-  onlineScene: 
+  onlineScene: Assets/1.Scene/JSC/1.Scene/JSC_Test_Lobby.unity
   transport: {fileID: 1309551748}
   networkAddress: localhost
   maxConnections: 100
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 5334877061007457638, guid: 9fcf5b9df3021464091dbde60fd5cf46, type: 3}
+  playerPrefab: {fileID: 3722408627760931810, guid: 6fe02671d5e1f5d44a6394cfa93845e5, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
@@ -302,3 +303,17 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
+--- !u!114 &1309551749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309551744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetX: 0
+  offsetY: 0
