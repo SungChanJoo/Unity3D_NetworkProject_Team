@@ -29,6 +29,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private int SafeZoneSpawnTime = 60;
     public Text SafeTimeText;
     [SerializeField] private Transform[] spawnPos;
+    private List<int> spawnPosList;
+
     private void Awake()
     {
         if (Instance == null)
@@ -143,16 +145,25 @@ public class GameManager : NetworkBehaviour
         RPCUpdateUI();
         StartCoroutine(SpawnSafeZone_co());
     }
+
     [ClientRpc]
     private void RPCUpdateUI()
     {
         UpdateUI();
         startGame = true;
         aliveUI_obj.SetActive(startGame);
+
+        spawnPosList = new List<int>();
         for (int i = 0; i < PlayerList.Count; i++)
         {
-            int rand = Random.Range(0, 7);
-            PlayerList[i].gameObject.transform.position = spawnPos[rand].transform.position;
+            spawnPosList.Add(i);
+        }
+        for(int i = 0; i < spawnPosList.Count; i++)
+        {
+            int rand = Random.Range(0, spawnPosList.Count);
+            int spawnPosIndexValue = spawnPosList[rand];
+            spawnPosList.RemoveAt(rand);
+            PlayerList[i].gameObject.transform.position = spawnPos[spawnPosIndexValue].transform.position;
         }
     }
 
