@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Cinemachine;
 using System.Linq;
 using Mirror;
@@ -45,17 +46,21 @@ public class PlayerMove : NetworkBehaviour
     [SerializeField] private float Attack_Cool = 0f;
 
     JoinPlayer joinPlayer;
+    Text LookPlayerNameText;
+    [SyncVar(hook = nameof(ChangeSafe))] public bool IsSafe = false;
+
     Cinemachine.CinemachineFreeLook freeLookCamera;
     int playerIndex = 0;
 
-    [SyncVar] private bool isDie = false;
+    [SyncVar] public bool isDie = false;
     private void Awake()
     {
         TryGetComponent(out anim);
         networkAnimator = GetComponent<NetworkAnimator>();
         camera = GameObject.Find("Camera").GetComponent<Camera>();
         joinPlayer = GetComponent<JoinPlayer>();
-        
+        LookPlayerNameText = GameObject.Find("LookPlayerNameText").GetComponent<Text>();
+
      //   Debug.Log("플레이어 : " + joinPlayer.playerName + " | " + joinPlayer.isFirstPlayer);
     }
     public override void OnStartLocalPlayer()
@@ -99,8 +104,12 @@ public class PlayerMove : NetworkBehaviour
     {
         playerIndex++;
         // 플레이어가 죽어있으면
-        while (playerIndex < GameManager.Instance.PlayerList.Count)
+        while (true)
         {
+            if (playerIndex >= GameManager.Instance.PlayerList.Count)
+            {
+                playerIndex = 0;
+            }
             if (GameManager.Instance.PlayerList[playerIndex].IsDead == false) // 살아있는 사람에게 변환
             {
                 Debug.Log("관전자 변경");
@@ -109,14 +118,11 @@ public class PlayerMove : NetworkBehaviour
                     // 현재 로컬 플레이어에 따라가도록 설정
                     freeLookCamera.Follow = GameManager.Instance.PlayerList[playerIndex].transform;
                     freeLookCamera.LookAt = GameManager.Instance.PlayerList[playerIndex].transform;
+                    LookPlayerNameText.text = $"관전 중 : {GameManager.Instance.PlayerList[playerIndex].playerName}";
                 }
                 break;
             }
             playerIndex++;
-        }
-        if(playerIndex >= GameManager.Instance.PlayerList.Count)
-        {
-            playerIndex = 0;
         }
     }
     private void Player_Move()
@@ -262,7 +268,10 @@ public class PlayerMove : NetworkBehaviour
         RPCKill(attacker, targetPlayer);
     }
 
+    void ChangeSafe(bool old, bool newValue)
+    {
 
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Attack"))
@@ -272,20 +281,39 @@ public class PlayerMove : NetworkBehaviour
 
                 string attackPlayer = player.playerName;
                 string targetPlayer = joinPlayer.playerName;
-                joinPlayer.CmdPlayerDie();
                 CmdKill(attackPlayer, targetPlayer);
             }
         }
+        if(other.CompareTag("SafeZone"))
+        {
+            IsSafe = true;
+        }
     }
 
-    [ClientRpc]
-    private void RPCKill(string attacker, string targetPlayer)
+    private void OnTriggerExit(Collider other)
     {
+        if (other.CompareTag("SafeZone"))
+        {
+            IsSafe = false;
+        }
+    }
+    [ClientRpc]
+    public void RPCKill(string attacker, string targetPlayer)
+    {
+        Die(attacker, targetPlayer);
+/*        anim.SetTrigger("Die");
+        isDie = true;
+        KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
+        StartCoroutine(DieDelay());*/
+        //Destroy(gameObject, 2f);
+    }
+    public void Die(string attacker, string targetPlayer)
+    {
+        joinPlayer.CmdPlayerDie();
         anim.SetTrigger("Die");
         isDie = true;
         KillLogUi.instance.DisplayKillLog(attacker, targetPlayer);
         StartCoroutine(DieDelay());
-        //Destroy(gameObject, 2f);
     }
     IEnumerator DieDelay()
     {

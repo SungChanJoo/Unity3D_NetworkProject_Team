@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Attack
   - UI
+  - SafeZone
   layers:
   - Default
   - TransparentFX

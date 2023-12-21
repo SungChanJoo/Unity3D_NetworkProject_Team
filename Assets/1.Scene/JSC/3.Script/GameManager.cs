@@ -25,6 +25,9 @@ public class GameManager : NetworkBehaviour
     private bool startGame = false;
     private int isAliveCountUI;
 
+    public GameObject SafeZone;
+    [SerializeField] private int SafeZoneSpawnTime = 60;
+    public Text SafeTimeText;
     [SerializeField] private Transform[] spawnPos;
     private void Awake()
     {
@@ -138,6 +141,7 @@ public class GameManager : NetworkBehaviour
     private void CmdGameStart()
     {
         RPCUpdateUI();
+        StartCoroutine(SpawnSafeZone_co());
     }
     [ClientRpc]
     private void RPCUpdateUI()
@@ -162,5 +166,47 @@ public class GameManager : NetworkBehaviour
         winnerUI_obj.SetActive(true);        
         winnerUI.WinnerUi(winner);
         startGame = false;
+    }
+
+    [Server]
+    IEnumerator SpawnSafeZone_co()
+    {
+        Debug.Log("is startGame ? :" + startGame);
+        while(true)
+        {
+            int rand = Random.Range(0, spawnPos.Length);
+            GameObject obj = Instantiate(SafeZone, spawnPos[rand].position, Quaternion.identity);
+            NetworkServer.Spawn(obj);
+
+            for (int i = 0; i < SafeZoneSpawnTime; i++) //60초후에
+            {
+                string time = $"{SafeZoneSpawnTime - i}";
+                RpcSafeZoneTime(time);
+                yield return new WaitForSeconds(1f);
+            }
+            RpcKillPlayer();
+            RpcSafeZoneTime("");
+            NetworkServer.Destroy(obj);
+            yield return new WaitForSeconds(5f);
+        }
+    }
+    [ClientRpc]
+    public void RpcSafeZoneTime(string time)
+    {
+        SafeTimeText.text = time;
+    }
+    [ClientRpc]
+    public void RpcKillPlayer()
+    {
+        Debug.Log("PlayerList.Count :" + PlayerList.Count);
+        for (int i = 0; i < PlayerList.Count; i++)
+        {
+            PlayerMove player = PlayerList[i].gameObject.GetComponent<PlayerMove>();
+            if (!player.IsSafe && !player.isDie)
+            {
+                Debug.Log($"Player : {PlayerList[i].playerName} IsSafe? : {player.IsSafe}");
+                player.Die("DeadZone", PlayerList[i].playerName);
+            }
+        }
     }
 }
