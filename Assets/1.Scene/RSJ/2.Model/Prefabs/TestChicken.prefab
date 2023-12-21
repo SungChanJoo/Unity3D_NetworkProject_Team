@@ -306,7 +306,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  speed: 5
+  speed: 3
 --- !u!54 &4599039929738502085
 Rigidbody:
   m_ObjectHideFlags: 0
