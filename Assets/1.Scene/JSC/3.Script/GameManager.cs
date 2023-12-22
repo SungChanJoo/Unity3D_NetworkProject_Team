@@ -158,12 +158,15 @@ public class GameManager : NetworkBehaviour
         {
             spawnPosList.Add(i);
         }
-        for(int i = 0; i < spawnPosList.Count; i++)
+        int j = 0;
+        while(spawnPosList.Count > 0)
         {
-            int rand = Random.Range(0, spawnPosList.Count);
-            int spawnPosIndexValue = spawnPosList[rand];
+            
+            int rand = Random.Range(0, spawnPosList.Count); // 0, 1
+            int spawnPosIndexValue = spawnPosList[rand]; // spawnPosList[1] = 1
             spawnPosList.RemoveAt(rand);
-            PlayerList[i].gameObject.transform.position = spawnPos[spawnPosIndexValue].transform.position;
+            PlayerList[j].gameObject.transform.position = spawnPos[spawnPosIndexValue].transform.position;
+            j++;
         }
     }
 

@@ -186,6 +186,8 @@ MonoBehaviour:
   audioSource: {fileID: 309174668229650799}
   attactSound: {fileID: 8300000, guid: 1c5d1c1bc589ee74e86c9921122c7097, type: 3}
   Attack_Cool: 3
+  IsSafe: 0
+  isDie: 0
   gameObjects:
   - {fileID: 3722408627760931814}
   - {fileID: 7285958274164559833}
@@ -204,7 +206,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &-4219430321245899753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -828,7 +830,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7285958274164559833}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3e1e974169d2bab45bf5ebc80fa2ad61, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
@@ -916,7 +918,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7285958275410612712}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3e1e974169d2bab45bf5ebc80fa2ad61, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
